@@ -42,8 +42,7 @@ client.on('ready', async () => {
             }else {
                 // send the tweet text
                 const formatted = form.replace('{text}', tweet.text);
-                const message = new MessageMedia(formatted, 'text/plain');
-                await client.sendMessage(chatID, message);
+                await client.sendMessage(chatID, formatted);
             }
         }
     });
