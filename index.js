@@ -24,6 +24,29 @@ client.on('qr', (qr) => {
 
 client.on('ready', async () => {
     console.log('Client is ready!');
+
+    cron.schedule('* */2 * * *', async () => {
+        console.log('Refreshing tweets...');
+        // get new tweets
+        const newTweets = await refreshTweets();
+        // send new tweets
+        for (let i = 0; i < newTweets.length; i++) {
+            const tweet = newTweets[i];
+            // send the tweet media
+            if (tweet.attachments.media_keys.length
+                && tweet.attachments.media_urls[0] !== undefined) {
+                const media = await MessageMedia.fromUrl(tweet.attachments.media_urls[0]);
+                await client.sendMessage(chatID, form.replace('{text}', tweet.text), {
+                    media
+                });
+            }else {
+                // send the tweet text
+                const formatted = form.replace('{text}', tweet.text);
+                const message = new MessageMedia(formatted, 'text/plain');
+                await client.sendMessage(chatID, message);
+            }
+        }
+    });
 });
 
 client.on('message', (message) => {
@@ -122,30 +145,6 @@ const accountIds = [
 
 
 let lastTweets = [];
-
-
-cron.schedule('* */2 * * *', async () => {
-    console.log('Refreshing tweets...');
-    // get new tweets
-    const newTweets = await refreshTweets();
-    // send new tweets
-    for (let i = 0; i < newTweets.length; i++) {
-        const tweet = newTweets[i];
-        // send the tweet media
-        if (tweet.attachments.media_keys.length
-        && tweet.attachments.media_urls[0] !== undefined) {
-            const media = await MessageMedia.fromUrl(tweet.attachments.media_urls[0]);
-            await client.sendMessage(chatID, form.replace('{text}', tweet.text), {
-                media
-            });
-        }else {
-            // send the tweet text
-            const formatted = form.replace('{text}', tweet.text);
-            const message = new MessageMedia(formatted, 'text/plain');
-            await client.sendMessage(chatID, message);
-        }
-    }
-});
 
 
 //test()
