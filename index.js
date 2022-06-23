@@ -124,7 +124,7 @@ const accountIds = [
 let lastTweets = [];
 
 
-cron.schedule('* *!/2 * * *', async () => {
+cron.schedule('* */2 * * *', async () => {
     console.log('Refreshing tweets...');
     // get new tweets
     const newTweets = await refreshTweets();
