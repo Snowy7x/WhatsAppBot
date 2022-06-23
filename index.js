@@ -25,7 +25,7 @@ client.on('qr', (qr) => {
 client.on('ready', async () => {
     console.log('Client is ready!');
 
-    cron.schedule('* */2 * * *', async () => {
+    cron.schedule('0 */2 * * *', async () => {
         console.log('Refreshing tweets...');
         // get new tweets
         const newTweets = await refreshTweets();
@@ -85,6 +85,7 @@ const get5Tweets = async (id) => {
             tweets.push({
                 text: tweet.text,
                 attachments: {
+                    id: tweet.id,
                     username: tweet.author_id,
                     accountId: id,
                     media_keys: mediaUrls,
@@ -113,6 +114,10 @@ const get5Tweets = async (id) => {
 
 const refreshTweets = async () => {
     let newTweets = [];
+    // create a tmp lastTweets and clear the old one:
+    let tmpLastTweets = lastTweets;
+    lastTweets = [];
+
     for (let i = 0; i < accountIds.length; i++) {
         const accountId = accountIds[i];
         console.log('refreshing for: ' + accountId);
@@ -120,13 +125,11 @@ const refreshTweets = async () => {
         // check if there are new tweets
         for (let j = 0; j < tweets.length; j++) {
             const tweet = tweets[j];
-            const lastTweet = lastTweets[i] ? lastTweets[i][j] : null;
-            console.log(lastTweet);
-            if (tweet.text !== lastTweet?.text) {
+            if (!tmpLastTweets.includes(tweet.id)) {
                 newTweets.push(tweet);
             }
+            lastTweets.push(tweet.ids);
         }
-        lastTweets.push(tweets);
     }
     return newTweets;
 }
