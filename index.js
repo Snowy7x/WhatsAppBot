@@ -1,6 +1,6 @@
 const rwClient = require("./twitterClient")
 const qrcode = require('qrcode-terminal');
-var cron = require('node-cron');
+const cron = require('node-cron');
 
 const {Client, LocalAuth, MessageMedia} = require('whatsapp-web.js');
 const client = new Client({
@@ -15,8 +15,21 @@ const form = `
 ─━── 「خبر」─━──
 {text}
 ─━─「⊱𝑨𝒊𝒓𝒆𝒔 𖡹 𝑵𝒆𝒘𝒔📬」─━─
-اللقب:|- اللقب
+Snowy :|- @انا
 `
+
+let lastTweets = [];
+const accountIds = [
+    '3095710434', // @Crunchyroll_ar
+    '2877858389', // @xotakuAN
+    '3308605272', // @ASCom0
+    '239960634', // @Ahmedm94m
+    '1335557059', // @EMUNOPLA
+    '1021359660501291008', // @AnimeNews360
+    '715966460049432577', // @AnimeTherapy
+    '1102366975572013057' // @An1meMaster
+]
+
 
 client.on('qr', (qr) => {
     qrcode.generate(qr, {small: true});
@@ -114,9 +127,6 @@ const get5Tweets = async (id) => {
 
 const refreshTweets = async () => {
     let newTweets = [];
-    // create a tmp lastTweets and clear the old one:
-    let tmpLastTweets = lastTweets;
-    lastTweets = [];
 
     for (let i = 0; i < accountIds.length; i++) {
         const accountId = accountIds[i];
@@ -125,29 +135,26 @@ const refreshTweets = async () => {
         // check if there are new tweets
         for (let j = 0; j < tweets.length; j++) {
             const tweet = tweets[j];
-            if (!tmpLastTweets.includes(tweet.id)) {
+            if (lastTweets.filter(t => t.text === tweet.text).length === 0) {
                 newTweets.push(tweet);
+                console.log('new tweet: ' + tweet.text);
+            }else{
+                console.log('old tweet: ' + tweet.text);
             }
-            lastTweets.push(tweet.ids);
         }
+
+        // if there are new tweets, push them to the newTweets array
+        lastTweets = lastTweets.concat(tweets);
     }
     return newTweets;
 }
 
-const accountIds = [
-    '3095710434', // @Crunchyroll_ar
-    '2877858389', // @xotakuAN
-    '3308605272', // @ASCom0
-    '239960634', // @Ahmedm94m
-    '1335557059', // @EMUNOPLA
-    '1021359660501291008', // @AnimeNews360
-    '715966460049432577', // @AnimeTherapy
-    '1102366975572013057' // @An1meMaster
-]
-
-
-let lastTweets = [];
-
+const test = async () => {
+    cron.schedule('*/2 * * * *', async () => {
+        const tweets = await refreshTweets();
+        console.log(tweets);
+    });
+}
 
 //test()
 client.initialize();
