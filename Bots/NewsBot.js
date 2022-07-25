@@ -1,12 +1,13 @@
 // convert require to import
-import * as fs from "fs";
-import Bot from "./Bot.js";
-import rwClient from "../twitterClient.js";
+//import Bot from "./Bot.js";
+const Bot = require("./Bot.js");
+//import rwClient from "../twitterClient.js";
+const rwClient = require("../twitterClient.js");
 // Importing corn
-import * as cron from "node-cron";
-import MessageMedia from "whatsapp-web.js";
+const cron = require('node-cron');
+const {MessageMedia} = require('whatsapp-web.js');
 
-class NewsBot extends Bot{
+module.exports = class NewsBot extends Bot{
     constructor(name){
         super(name);
         this.chatID = '120363040300373530@g.us';
@@ -155,5 +156,3 @@ Snowy :|- @انا
     }
 
 }
-
-export default NewsBot;

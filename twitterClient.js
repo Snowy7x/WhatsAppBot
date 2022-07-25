@@ -1,4 +1,4 @@
-import {TwitterApi} from "twitter-api-v2";
+const {TwitterApi} = require("twitter-api-v2");
 
 const client = new TwitterApi({
     appKey: 'UmlZRHZlgV1OnjSWnldRbEYgP',
@@ -10,4 +10,4 @@ const client = new TwitterApi({
 
 const rwClient = client.readWrite;
 
-export default rwClient;
+module.exports = rwClient;

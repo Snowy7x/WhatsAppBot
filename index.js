@@ -1,16 +1,14 @@
-// Importing qr-code const qrcode = require('qrcode-terminal');
-import * as qrcode from 'qrcode-terminal';
-import {Client} from 'whatsapp-web.js';
-import LocalAuth from "whatsapp-web.js";
+const qrcode = require('qrcode-terminal');
+const {Client, LocalAuth} = require('whatsapp-web.js');
+
 const client = new Client({
     puppeteer: {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     },
-    authStrategy: new LocalAuth.LocalAuth()
+    authStrategy: new LocalAuth()
 });
 // Import all the bots
-import NewsBot from "./Bots/NewsBot.js";
-import HelpBot from "./Bots/HelpBot.js";
+const {NewsBot, HelpBot} = require('./Bots/index.js');
 
 // create new Instance of each bot
 const newsBot = new NewsBot("News Bot");

@@ -1,10 +1,12 @@
-import Bot from "./Bot.js";
-import * as fs from "fs";
+//import Bot from "./Bot.js";
+const Bot = require("./Bot.js");
+//import * as fs from "fs";
+const fs = require("fs");
 
 // Importing corn
 
 
-class HelpBot extends Bot {
+module.exports = class HelpBot extends Bot {
     constructor(name, prefix = "", workChannelID = "") {
         super(name, prefix);
         // Check if messages file exists
@@ -1401,5 +1403,3 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
         this.nextQueue = this.nextQueue.filter(m => m.author !== author);
     }
 }
-
-export default HelpBot;

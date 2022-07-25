@@ -1,4 +1,4 @@
-class Bot {
+module.exports = class Bot {
     constructor(name, prefix = "") {
         this.name = name;
         this.prefix = prefix;
@@ -17,5 +17,3 @@ class Bot {
     }
 
 }
-
-export default Bot;
