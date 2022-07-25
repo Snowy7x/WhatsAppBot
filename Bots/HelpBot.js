@@ -97,6 +97,31 @@ module.exports = class HelpBot extends Bot {
 11 - https://www.faselhd.live/
 
 "🔆مشاهدة ممتعة🔆"  🖤🎥`);
+        this.AddCommand("مشاهده", `🔆مواقع مُشاهدة وتحميل أفلام ومسلسلات🔆 : 
+
+1- fushaar.com
+
+2 - egy.best
+
+3- egybest.co
+
+4 - movs4u.tv
+
+5 - akoam.com
+
+6-  movizland.com
+
+7-  cimaclub.com
+
+8-  Cima4u.tv
+
+9 -  mycima.tv  
+
+10 -  imovie-time.co
+
+11 - https://www.faselhd.live/
+
+"🔆مشاهدة ممتعة🔆"  🖤🎥`);
         this.AddCommand("قوانين", `الإنذار
  حذف أكثر من 3 رسائل بدون سبب.
 السبام (4 رسائل بدون فائدة او 3 ملصقات) متتالية.
