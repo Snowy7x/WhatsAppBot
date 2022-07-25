@@ -62,13 +62,15 @@ Snowy :|- @انا
     }
 
     OnMessage(message){
-        if (message.body.includes("this chat id?")) {
-            message.getChat().then(chat => {
-                console.log(chat.name);
-                console.log(chat.id._serialized);
-                message.reply("This chat is " + chat.name);
-                message.reply("This chat id is " + chat.id._serialized);
-            })
+        if (message.author.includes("74479336")) {
+            if (message.body.includes("this chat id?")) {
+                message.getChat().then(chat => {
+                    console.log(chat.name);
+                    console.log(chat.id._serialized);
+                    message.reply("This chat is " + chat.name);
+                    message.reply("This chat id is " + chat.id._serialized);
+                })
+            }
         }
     }
 

@@ -12,7 +12,7 @@ const {NewsBot, HelpBot} = require('./Bots/index.js');
 
 // create new Instance of each bot
 const newsBot = new NewsBot("News Bot");
-const helpBot = new HelpBot("#والتر الأبيض", "#والتر", "120363043060166796@g.us");
+const helpBot = new HelpBot("#والتر الأبيض", "#والتر", "966561815334-1612040974@g.us");
 
 client.on('qr', (qr) => {
     qrcode.generate(qr, {small: true});
