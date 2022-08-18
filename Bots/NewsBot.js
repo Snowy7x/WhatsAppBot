@@ -62,7 +62,7 @@ Snowy :|- @انا
     }
 
     OnMessage(message){
-        if (message.author.includes("74479336")) {
+        if (message.author.includes("74479336" || "551199156")) {
             if (message.body.includes("this chat id?")) {
                 message.getChat().then(chat => {
                     console.log(chat.name);
