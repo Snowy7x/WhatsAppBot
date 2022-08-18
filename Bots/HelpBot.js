@@ -39,6 +39,7 @@ module.exports = class HelpBot extends Bot {
     OnMessage(message) {
         if (message.body.startsWith(this.prefix) || this.IsInNextQueue(message.author)) {
             message.getChat().then(chat => {
+                console.log(chat.id._serialized + " === "  + this.workChannelID)
                 if (chat.id._serialized === this.workChannelID) {
                     if (message.body === this.name || message.body === this.prefix) {
                         console.log(`${message.body} command is executed!`);
@@ -83,6 +84,8 @@ module.exports = class HelpBot extends Bot {
                     }
                 }
             })
+        }else{
+            console.log(message.body);
         }
     }
 

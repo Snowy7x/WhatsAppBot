@@ -1242,7 +1242,7 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
 22-افلام وثائقية 📒`
 )
 
-const helpBot2 = new HelpBot("#Jarvis", "#جارفيس", "120363026234217828@g.us");
+const helpBot2 = new HelpBot("#jarvis", "#جارفيس", "120363026234217828@g.us");
 helpBot2.AddCommand("#جارفيس", `「الــبـــــوت 🤖 جارفيس」
 ─━─━─━∞◆∞━─━─
 
@@ -1560,7 +1560,7 @@ https://t.me/shortseries/1318`);
 
 helpBot2.AddCommand(
     "توصيات",
-    `سيعرض لك والتر قائمة بها عدّة خيارات وخانات...
+    `سيعرض لك جارفيس قائمة بها عدّة خيارات وخانات...
 قم باختيار ما تريده منه…
 لعرض القائمة قم بكتابة 1#  او على حسب الرقم الذي تريده  
 
@@ -2482,16 +2482,19 @@ client.on('qr', (qr) => {
     console.log('Scan this QR code in your phone to login');
     newsBot.OnQr(qr);
     helpBot.OnQr(qr);
+    helpBot2.OnQr(qr);
 });
 
 client.on('ready', async () => {
     newsBot.OnReady()
     helpBot.OnReady()
+    helpBot2.OnReady()
 });
 
 client.on('message', (message) => {
     newsBot.OnMessage(message);
     helpBot.OnMessage(message);
+    helpBot2.OnMessage(message);
 })
 
 
