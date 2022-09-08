@@ -6,7 +6,6 @@ const rwClient = require("../twitterClient.js");
 // Importing corn
 const cron = require('node-cron');
 const {MessageMedia} = require('whatsapp-web.js');
-const {getSticker} = require("./Stickers");
 
 module.exports = class NewsBot extends Bot
 {
@@ -68,7 +67,6 @@ Snowy :|- @انا
             if (message.body === "sticker") {
                 console.log("Test Channel");
                 message.reply("Good: ");
-                const sticker2 = getSticker()
                 const sticker = await MessageMedia.fromFilePath('./test2.png');
                 await message.reply(sticker, {sendMediaAsSticker: true})
                 //await client.sendMessage(message.from, sticker, {sendMediaAsSticker: true})

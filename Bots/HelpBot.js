@@ -2,7 +2,6 @@
 const Bot = require("./Bot.js");
 //import * as fs from "fs";
 const fs = require("fs");
-const stickerManager = require("./Stickers");
 const {MessageMedia} = require("whatsapp-web.js");
 
 // Importing corn
