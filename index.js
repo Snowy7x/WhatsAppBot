@@ -1557,6 +1557,7 @@ https://t.me/joinchat/WKPFlBCJFFSaHunE
 
 Harper's Island
 https://t.me/shortseries/1318`);
+helpBot2.AddCommand("ستيكر", null, false, false, null, null, "", true)
 
 helpBot2.AddCommand(
     "توصيات",
@@ -2477,12 +2478,12 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
 )
 
 
-client.on('qr', (qr) => {
+client.on('qr', async (qr) => {
     qrcode.generate(qr, {small: true});
-    console.log('Scan this QR code in your phone to login');
-    newsBot.OnQr(qr);
-    helpBot.OnQr(qr);
-    helpBot2.OnQr(qr);
+    console.log('\nScan this QR code in your phone to login');
+    await newsBot.OnQr(qr);
+    await helpBot.OnQr(qr);
+    await helpBot2.OnQr(qr);
 });
 
 client.on('ready', async () => {
@@ -2491,10 +2492,10 @@ client.on('ready', async () => {
     helpBot2.OnReady()
 });
 
-client.on('message', (message) => {
-    newsBot.OnMessage(message);
-    helpBot.OnMessage(message);
-    helpBot2.OnMessage(message);
+client.on('message', async (message) => {
+    await newsBot.OnMessage(message, client);
+    await helpBot.OnMessage(message, client);
+    await helpBot2.OnMessage(message, client);
 })
 
 

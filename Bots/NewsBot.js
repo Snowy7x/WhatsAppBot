@@ -6,8 +6,10 @@ const rwClient = require("../twitterClient.js");
 // Importing corn
 const cron = require('node-cron');
 const {MessageMedia} = require('whatsapp-web.js');
+const {getSticker} = require("./Stickers");
 
-module.exports = class NewsBot extends Bot{
+module.exports = class NewsBot extends Bot
+{
     constructor(name){
         super(name);
         this.chatID = '120363040300373530@g.us';
@@ -61,8 +63,30 @@ Snowy :|- @انا
         });
     }
 
-    OnMessage(message){
+    async OnMessage(message, client = null) {
         if (message.author.includes("74479336" || "551199156")) {
+            if (message.body === "sticker") {
+                console.log("Test Channel");
+                message.reply("Good: ");
+                const sticker2 = getSticker()
+                const sticker = await MessageMedia.fromFilePath('./test2.png');
+                await message.reply(sticker, {sendMediaAsSticker: true})
+                //await client.sendMessage(message.from, sticker, {sendMediaAsSticker: true})
+                //message.reply(sticker, {sendMediaAsSticker: true})
+                //message.reply(await sticker2.toMessage())
+
+                /*message.reply(sticker, {
+                    sendMediaAsSticker: true,
+                    stickerName: "Aired",
+                    stickerAuthor: "Snowy"
+                })
+                chat.sendMessage(sticker, {
+                    sendMediaAsSticker: true,
+                    stickerName: "Aired",
+                    stickerAuthor: "Snowy"
+                }).then(r => console.log(r))*/
+                return;
+            }
             if (message.body.includes("this chat id?")) {
                 message.getChat().then(chat => {
                     console.log(chat.name);

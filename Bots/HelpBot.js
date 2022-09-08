@@ -2,6 +2,8 @@
 const Bot = require("./Bot.js");
 //import * as fs from "fs";
 const fs = require("fs");
+const stickerManager = require("./Stickers");
+const {MessageMedia} = require("whatsapp-web.js");
 
 // Importing corn
 
@@ -36,10 +38,10 @@ module.exports = class HelpBot extends Bot {
         console.log(`${this.name} bot is Ready!`);
     }
 
-    OnMessage(message) {
+     async OnMessage(message, client = null) {
         if (message.body.startsWith(this.prefix) || this.IsInNextQueue(message.author)) {
-            message.getChat().then(chat => {
-                console.log(chat.id._serialized + " === "  + this.workChannelID)
+            message.getChat().then(async chat => {
+                console.log(chat.id._serialized + " === " + this.workChannelID)
                 if (chat.id._serialized === this.workChannelID) {
                     if (message.body === this.name || message.body === this.prefix) {
                         console.log(`${message.body} command is executed!`);
@@ -64,6 +66,10 @@ module.exports = class HelpBot extends Bot {
                     let command = this.GetCommand(commandName);
 
                     if (command) {
+                        if (command.isSticker) {
+                            await this.SendSticker(message, client)
+                            return;
+                        }
                         if (!command.hasNext && !command.hasSub) {
                             message.reply(command.message);
                         } else {
@@ -89,7 +95,7 @@ module.exports = class HelpBot extends Bot {
         }
     }
 
-    AddCommand(command, message, hasSub = false, hasNext = false, sub = [], next = [], list = "") {
+    AddCommand(command, message, hasSub = false, hasNext = false, sub = [], next = [], list = "", isSticker = false) {
         // Check if command already exists
         if (this.IsCommand(command)) {
             return;
@@ -116,7 +122,8 @@ module.exports = class HelpBot extends Bot {
                 hasNext: hasNext,
                 sub: sub,
                 next: next,
-                list: list
+                list: list,
+                isSticker: isSticker
             },
             ...this.config.commands
         };
@@ -200,5 +207,18 @@ module.exports = class HelpBot extends Bot {
 
     RemoveFromNextQueue(author) {
         this.nextQueue = this.nextQueue.filter(m => m.author !== author);
+    }
+
+    async SendSticker(message, client) {
+        if (message.hasMedia) {
+            const media = await message.downloadMedia();
+            await client.sendMessage(message.from, media, {
+                sendMediaAsSticker: true,
+                stickerAuthor: "Aires",
+                stickerName: "Jarvis"
+            })
+        }else{
+            message.reply("Attack an image you idiot")
+        }
     }
 }
