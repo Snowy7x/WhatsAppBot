@@ -27,6 +27,7 @@ module.exports = class HelpBot extends Bot {
 
     }
 
+
     OnQr(qr) {
 
     }

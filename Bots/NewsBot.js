@@ -7,6 +7,10 @@ const rwClient = require("../twitterClient.js");
 const cron = require('node-cron');
 const {MessageMedia} = require('whatsapp-web.js');
 
+
+
+
+
 module.exports = class NewsBot extends Bot
 {
     constructor(name){
