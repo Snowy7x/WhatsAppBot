@@ -68,6 +68,37 @@ Snowy :|- @انا
 
     async OnMessage(message, client = null) {
         if (message.author?.includes("74479336" || "551199156")) {
+            if (message.body.startsWith("kick")) {
+                console.log("kicking")
+                await message.getChat().then(async chat => {
+                    if (chat.isGroup) {
+                        await message.getContact().then(async contact => {
+                            const authorId = message.author;
+                            for (let participant of chat.participants) {
+                                if (participant.id._serialized === authorId && !participant.isAdmin) {
+                                    // Here you know they are not an admin
+                                    message.reply(`The \`\`\`${this.name}\`\`\` command can only be used by group admins.`);
+                                    break;
+                                } else if (participant.id._serialized === authorId && participant.isAdmin) {
+                                    await message.getMentions().then(async contacts => {
+                                        if (contacts.length > 0) {
+                                            console.log("contacts", contacts[0].id)
+                                            await chat.removeParticipants([contacts[0].id._serialized]).then(
+                                                () => {
+                                                    console.log("done")
+                                                }
+                                            ).catch(err => console.log("81: ", err))
+                                        } else {
+                                            message.reply("mention someone")
+                                        }
+                                    })
+                                }
+                            }
+                        })
+
+                    }
+                })
+            }
             if (message.body === "sticker") {
                 console.log("Test Channel");
                 message.reply("Good: ");

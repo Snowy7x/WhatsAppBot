@@ -1558,7 +1558,9 @@ https://t.me/joinchat/WKPFlBCJFFSaHunE
 Harper's Island
 https://t.me/shortseries/1318`,false, false, null, null, "", false);
 helpBot2.AddCommand("ستيكر", null, false, false, null, null, "", true)
-
+helpBot2.AddCommand("مين عمك" || "من عمك" || "عمك", `
+دازاي الأب 3>
+مازينو العم 3>`, false, false, null, null, "", true)
 helpBot2.AddCommand(
     "توصيات",
     `سيعرض لك جارفيس قائمة بها عدّة خيارات وخانات...
