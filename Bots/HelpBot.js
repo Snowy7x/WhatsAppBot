@@ -65,23 +65,24 @@ module.exports = class HelpBot extends Bot {
                     if (command) {
                         if (command.isSticker) {
                             await this.SendSticker(message, client)
-                            return;
-                        }
-                        if (!command.hasNext && !command.hasSub) {
-                            message.reply(command.message);
-                        } else {
-                            if (command.hasNext) {
+                        }else {
+                            console.log("ggg a command")
+                            if (!command.hasNext && !command.hasSub) {
                                 message.reply(command.message);
-                                // wait for 3 seconds
-                                setTimeout(() => {
-                                    message.reply(command.list);
+                            } else {
+                                if (command.hasNext) {
+                                    message.reply(command.message);
+                                    // wait for 3 seconds
+                                    setTimeout(() => {
+                                        message.reply(command.list);
 
-                                    // add the contact to the next list and the command to the next queue
-                                    this.nextQueue.push({
-                                        author: message.author,
-                                        command: commandName
-                                    })
-                                }, 3000);
+                                        // add the contact to the next list and the command to the next queue
+                                        this.nextQueue.push({
+                                            author: message.author,
+                                            command: commandName
+                                        })
+                                    }, 3000);
+                                }
                             }
                         }
                     }
