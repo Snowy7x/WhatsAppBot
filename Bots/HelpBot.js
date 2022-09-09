@@ -4,8 +4,6 @@ const Bot = require("./Bot.js");
 const fs = require("fs");
 const {MessageMedia} = require("whatsapp-web.js");
 
-// Importing corn
-
 
 module.exports = class HelpBot extends Bot {
     constructor(name, prefix = "", workChannelID = "") {
@@ -37,7 +35,7 @@ module.exports = class HelpBot extends Bot {
         console.log(`${this.name} bot is Ready!`);
     }
 
-     async OnMessage(message, client = null) {
+    async OnMessage(message, client = null) {
         if (message.body.startsWith(this.prefix) || this.IsInNextQueue(message.author)) {
             message.getChat().then(async chat => {
                 console.log(chat.id._serialized + " === " + this.workChannelID)
@@ -211,13 +209,18 @@ module.exports = class HelpBot extends Bot {
     async SendSticker(message, client) {
         if (message.hasMedia) {
             const media = await message.downloadMedia();
-            await client.sendMessage(message.from, media, {
-                sendMediaAsSticker: true,
-                stickerAuthor: "Aires",
-                stickerName: "Jarvis"
-            })
+            message.reply("خلني أشوف...")
+            try {
+                await client.sendMessage(message.from, media, {
+                    sendMediaAsSticker: true,
+                    stickerAuthor: "Aires",
+                    stickerName: "Jarvis"
+                })
+            }catch (e){
+                message.reply("ما ينفع غير صورة يا حلو")
+            }
         }else{
-            message.reply("Attack an image you idiot")
+            message.reply("حط صورة مع الرسالة يا غبي")
         }
     }
 }

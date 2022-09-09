@@ -1,3 +1,37 @@
+/*var test = ["a", "b", "c"]
+test.map((value, index) => {
+    console.log(value, index)
+})*/
+const json_obj = {
+    "YouTube": "https://youtube.com/channel/UCFYwv1RCjVveguPeM6elqpg",
+    "Twitter": "https://twitter.com/WeArabGamers",
+    "Discord": "https://discord.gg/sPfG5RR6A4"
+}
+
+var dat = []
+
+for (var n in json_obj){
+    dat.push({name: n, value: json_obj[name]})
+}
+
+
+const newCmd = new SlashCommandBuilder()
+    .setName('accounts')
+    .setDescription('Send a link of an account for Arab gamers')
+
+    .addStringOption(option => option
+        .setName('platform')
+        .setDescription('The plaftorm')
+        .setRequired(true)
+        .addChoices(...dat)
+    );
+
+
+module.exports = {
+    data: newCmd
+};
+
+return;
 const qrcode = require('qrcode-terminal');
 const {Client, LocalAuth} = require('whatsapp-web.js');
 
