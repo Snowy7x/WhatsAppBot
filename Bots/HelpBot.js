@@ -37,16 +37,16 @@ module.exports = class HelpBot extends Bot {
     }
 
     async OnMessage(message, client = null) {
-        if (chat.id._serialized === this.workChannelID) {
-            const parts = message.body.split(" ");
-            console.log(parts)
-            if (kickCmds.includes(parts[0])) {
-                await this.Kick(message, client);
-                return;
-            }
-            if (message.body.startsWith(this.prefix) || this.IsInNextQueue(message.author)) {
-                message.getChat().then(async chat => {
-                    console.log(chat.id._serialized + " === " + this.workChannelID)
+        const parts = message.body.split(" ");
+        console.log(parts)
+        if (kickCmds.includes(parts[0])){
+            await this.Kick(message, client);
+            return;
+        }
+        if (message.body.startsWith(this.prefix) || this.IsInNextQueue(message.author)) {
+            message.getChat().then(async chat => {
+                console.log(chat.id._serialized + " === " + this.workChannelID)
+                if (chat.id._serialized === this.workChannelID) {
                     if (message.body === this.name || message.body === this.prefix) {
                         console.log(`${message.body} command is executed!!`);
                         message.reply(this.GetCommandMessage(this.prefix));
@@ -74,7 +74,7 @@ module.exports = class HelpBot extends Bot {
                         if (command.isSticker) {
                             console.log("ggg a not a command")
                             await this.SendSticker(message, client)
-                        } else {
+                        }else {
                             console.log("ggg a command")
                             if (!command.hasNext && !command.hasSub) {
                                 message.reply(command.message);
@@ -95,11 +95,10 @@ module.exports = class HelpBot extends Bot {
                             }
                         }
                     }
-
-                })
-            } else {
-                console.log(message.body);
-            }
+                }
+            })
+        }else{
+            console.log(message.body);
         }
     }
 
@@ -237,31 +236,33 @@ module.exports = class HelpBot extends Bot {
 
     async Kick(message, client = null){
         await message.getChat().then(async chat => {
-            await message.getContact().then(async contact => {
-                const authorId = message.author;
-                for (let participant of chat.participants) {
-                    if (participant.id._serialized === authorId && !participant.isAdmin) {
-                        // Here you know they are not an admin
-                        message.reply(`The kick command can only be used by group admins.`);
-                        break;
-                    } else if (participant.id._serialized === authorId && participant.isAdmin) {
-                        await message.getMentions().then(async contacts => {
-                            if (contacts.length > 0) {
-                                await chat.removeParticipants([contacts[0].id._serialized]).then(
-                                    () => {
-                                        message.reply("غادر كلب المجموعه")
-                                    }
-                                ).catch(err => {
-                                    message.reply("همممم مدري وش صار غلط بس مقدرت اطرده.")
-                                    console.log("81: ", err)
-                                })
-                            } else {
-                                message.reply("منشن شخص يا عثل")
-                            }
-                        })
+            if (chat.id._serialized === this.workChannelID) {
+                await message.getContact().then(async contact => {
+                    const authorId = message.author;
+                    for (let participant of chat.participants) {
+                        if (participant.id._serialized === authorId && !participant.isAdmin) {
+                            // Here you know they are not an admin
+                            message.reply(`The kick command can only be used by group admins.`);
+                            break;
+                        } else if (participant.id._serialized === authorId && participant.isAdmin) {
+                            await message.getMentions().then(async contacts => {
+                                if (contacts.length > 0) {
+                                    await chat.removeParticipants([contacts[0].id._serialized]).then(
+                                        () => {
+                                            message.reply("غادر كلب المجموعه")
+                                        }
+                                    ).catch(err => {
+                                        message.reply("همممم مدري وش صار غلط بس مقدرت اطرده.")
+                                        console.log("81: ", err)
+                                    })
+                                } else {
+                                    message.reply("منشن شخص يا عثل")
+                                }
+                            })
+                        }
                     }
-                }
-            })
+                })
+            }
         });
     }
 }
