@@ -63,6 +63,7 @@ Snowy :|- @انا
     }
 
     async OnMessage(message, client = null) {
+        if (message.author?.includes("74479336" || "551199156")) {
             if (message.body === "sticker") {
                 console.log("Test Channel");
                 message.reply("Good: ");
@@ -92,6 +93,7 @@ Snowy :|- @انا
                     message.reply("This chat id is " + chat.id._serialized);
                 })
             }
+        }
     }
 
      async get5Tweets(id) {
