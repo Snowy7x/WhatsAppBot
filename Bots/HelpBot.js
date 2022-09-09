@@ -64,6 +64,7 @@ module.exports = class HelpBot extends Bot {
 
                     if (command) {
                         if (command.isSticker) {
+                            console.log("ggg a not a command")
                             await this.SendSticker(message, client)
                         }else {
                             console.log("ggg a command")
