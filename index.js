@@ -13,8 +13,8 @@ const client = new Client({
     puppeteer: {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     },
-    ffmpegPath: "./ffmpeg",
-    ffmpeg: "./ffmpeg",
+    ffmpegPath: "/usr/bin/ffmpeg",
+    ffmpeg: "/usr/bin/ffmpeg",
     authStrategy: new LocalAuth()
 });
 // Import all the bots
