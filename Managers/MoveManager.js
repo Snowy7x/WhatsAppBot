@@ -1,5 +1,5 @@
 const movieInfo = require('movie-info')
-const {translate} = require("free-translate")
+const translate = require('translate-google')
 
 const getMoveDetails = async (movieName) => {
     let data;
@@ -8,7 +8,7 @@ const getMoveDetails = async (movieName) => {
         console.log("got the data")
     })
     let desc;
-    await translate(data.overview, {from: "en", to: "ar"}).then((da) => {
+    await translate(data.overview, {to: 'ar'}).then((da) => {
         console.log("got the desc")
         desc = da
     }).catch((err) => {
