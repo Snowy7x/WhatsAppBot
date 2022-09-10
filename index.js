@@ -1356,7 +1356,7 @@ helpBot2.AddCommand("مشاهده", `~ 「مواقع مشاهدة و تحميل 
 11 - https://www.faselhd.live/
 ≔≖≕≖≔≖≕≖≔≖≕≖≔≖≕≖≔≖≕
 ~"「مشاهدة ممتعة」"  🖤🎥~`,false, false, null, null, "", false);
-helpBot2.AddCommand("قوانين", `✪✶⬇︎✶ القوانين ✶⬇︎✶✪*
+helpBot2.AddCommand("القوانين", `✪✶⬇︎✶ القوانين ✶⬇︎✶✪*
 ┵•يرجى الالتزام بها بالحرف الواحد•┲
 1-❃ احترام اراء الجميع بجميع انواعها
 2-❃ عدم تكرار الأخبار الا في حالة عدم معرفتك بتواجده في الكتيبة
@@ -1571,7 +1571,7 @@ https://t.me/joinchat/WKPFlBCJFFSaHunE
 Harper's Island
 https://t.me/shortseries/1318`,false, false, null, null, "", false);
 helpBot2.AddCommand("ستيكر", null, false, false, null, null, "", true)
-helpBot2.AddCommand("مين عمك" || "من عمك" || "عمك", `
+helpBot2.AddCommand("عمك", `
 دازاي الأب 3>
 مازينو العم 3>`, false, false, null, null, "", false)
 helpBot2.AddCommand(
@@ -2492,10 +2492,13 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
 22-افلام وثائقية 📒`
 )
 helpBot2.AddCustomCommand("فلم", async (args, message, chat, client) => {
+    console.log("doing cmd: " + message.body)
+
     if (args.length <= 0) {
         message.reply(["وش رأيك تكتب اسم الفلم", "يا ذكي خذ مثال: استخدم #جارفيس فلم naruto", "بالله؟ اكتب اسم", "لا"].random())
     } else {
         await getMoveDetails(args.join(" ")).then(async data => {
+            message.reply("ثواني بشوف...")
             if (data.name) {
                 await MessageMedia.fromUrl(data.poster).then((poster) => {
                     chat.sendMessage(
