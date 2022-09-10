@@ -6,7 +6,9 @@ const {MessageMedia} = require("whatsapp-web.js");
 const mime = require('mime-types');
 
 const kickCmds = ["#kick", "#ban", "#طرد", "#كيك"]
-
+Array.prototype.random = function () {
+    return this[Math.floor((Math.random()*this.length))];
+}
 module.exports = class HelpBot extends Bot {
     constructor(name, prefix = "", workChannelID = "") {
         super(name, prefix);
@@ -100,6 +102,8 @@ module.exports = class HelpBot extends Bot {
                                 }
                             }
                         }
+                    }else{
+                        message.reply(["وش أسويلك؟", "اها سو؟", "هممممم", "جرب تشوف المينيو #جارفيس", "سو..."].random())
                     }
                 }
             })
