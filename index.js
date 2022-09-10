@@ -2504,8 +2504,8 @@ helpBot2.AddCustomCommand("فلم", async (args, message, chat, client) => {
     if (args.length <= 0) {
         message.reply(["وش رأيك تكتب اسم الفلم", "يا ذكي خذ مثال: استخدم #جارفيس فلم naruto", "بالله؟ اكتب اسم", "لا"].random())
     } else {
+        message.reply("ثواني بشوف...")
         getMoveDetails(args.join(" ")).then(async data => {
-            message.reply("ثواني بشوف...")
             if (data.name) {
                 await MessageMedia.fromUrl(data.poster).then((poster) => {
                     chat.sendMessage(
