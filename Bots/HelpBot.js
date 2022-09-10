@@ -308,11 +308,15 @@ module.exports = class HelpBot extends Bot {
 
                     // Save to file
                     try {
-                        fs.writeFileSync(fullFilename, media.data, { encoding: 'base64' });
+                        fs.writeFileSync(fullFilename, media.data, {encoding: 'base64'});
                         MessageMedia.fromFilePath(fullFilename)
-                        client.sendMessage(message.from, new MessageMedia(media.mimetype, media.data, filename.toString()), { sendMediaAsSticker: true, stickerAuthor: "Jarvis",
-                            stickerName: "Aires"} )
-                        message.reply("يلا خذ استمتع")
+                        client.sendMessage(message.from, new MessageMedia(media.mimetype, media.data, filename.toString()), {
+                            sendMediaAsSticker: true, stickerAuthor: "Jarvis",
+                            stickerName: "Aires"
+                        }).then(() => {
+                            message.reply("يلا خذ استمتع")
+
+                        })
                         fs.unlinkSync(fullFilename)
                     } catch (err) {
                         message.reply("احم مدري وش صار بس ما قدرت اسويه...")
