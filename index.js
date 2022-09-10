@@ -3,13 +3,13 @@ getMoveDetails("Naruto").then (data => {
     console.log(data)
 })
 return;*/
-const translate = require('translate-google')
+/*const translate = require('translate-google')
 translate('I speak Chinese', {to: 'ar'}).then(res => {
     console.log(res)
 }).catch(err => {
     console.error(err)
 })
-return;
+return;*/
 const qrcode = require('qrcode-terminal');
 const {Client, LocalAuth, MessageMedia} = require('whatsapp-web.js');
 const {getMoveDetails} = require("./Managers/MoveManager")
