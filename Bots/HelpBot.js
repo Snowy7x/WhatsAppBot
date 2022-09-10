@@ -3,6 +3,7 @@ const Bot = require("./Bot.js");
 //import * as fs from "fs";
 const fs = require("fs");
 const {MessageMedia} = require("whatsapp-web.js");
+const mime = require('mime-types');
 
 const kickCmds = ["#kick", "#ban", "#طرد", "#كيك"]
 
@@ -25,6 +26,7 @@ module.exports = class HelpBot extends Bot {
 
         this.nextQueue = [];
         this.workChannelID = workChannelID;
+        this.customCommands = []
 
     }
 
@@ -38,14 +40,12 @@ module.exports = class HelpBot extends Bot {
 
     async OnMessage(message, client = null) {
         const parts = message.body.split(" ");
-        console.log(parts)
         if (kickCmds.includes(parts[0])){
             await this.Kick(message, client);
             return;
         }
         if (message.body.startsWith(this.prefix) || this.IsInNextQueue(message.author)) {
             message.getChat().then(async chat => {
-                console.log(chat.id._serialized + " === " + this.workChannelID)
                 if (chat.id._serialized === this.workChannelID) {
                     if (message.body === this.name || message.body === this.prefix) {
                         console.log(`${message.body} command is executed!!`);
@@ -65,17 +65,23 @@ module.exports = class HelpBot extends Bot {
                         }
                     }
 
-                    let commandName = message.body.replace(this.prefix + " ", "");
+                    let commandName = message.body.split(" ")[1];
+                    let args = message.body.split(" ")
+                    args.splice(0, 2)
                     console.log(`${commandName} command is executing!`);
+
+                    if (this.IsCustomCmd(commandName)){
+                        console.log("custom command")
+                        await this.customCommands[commandName].callback(args, message, chat, client)
+                        return;
+                    }
 
                     let command = this.GetCommand(commandName);
 
                     if (command) {
                         if (command.isSticker) {
-                            console.log("ggg a not a command")
                             await this.SendSticker(message, client)
                         }else {
-                            console.log("ggg a command")
                             if (!command.hasNext && !command.hasSub) {
                                 message.reply(command.message);
                             } else {
@@ -98,13 +104,77 @@ module.exports = class HelpBot extends Bot {
                 }
             })
         }else{
-            console.log(message.body);
         }
     }
 
-    AddCommand(command, message, hasSub = false, hasNext = false, sub = [], next = [], list = "", isSticker = false) {
+    SetCommandDefaults(options, defaults) {
+        return _.defaults({}, _.clone(options), defaults)
+    }
+
+    AddCustomCommand(command, callback){
+        if (this.IsCommand(command) || this.IsCustomCmd(command)) {
+            return console.log("Command: " + command + " has been added already");
+        }
+        this.customCommands = {
+            [command]: {
+                command: command,
+                callback: callback
+            }, ...this.customCommands
+        }
+    }
+
+    IsCustomCmd(command){
+        return this.customCommands[command] !== undefined;
+    }
+
+    AddCommand2(options) {
         // Check if command already exists
+        options = this.SetCommandDefaults(options, {
+            command: "",
+            message: "",
+            hasSub: false,
+            hasNext: false,
+            sub: [],
+            next: [],
+            list: "",
+            isSticker: false,
+        })
         if (this.IsCommand(command)) {
+            return;
+        }
+        // Add the command using the command as the key and the message as the value
+        /*
+          [CommandName]:
+            message: string
+            hasSub: boolean
+            hasNext: boolean
+            sub: array of strings
+            next: {
+                [NextCommandName]:{
+                    command: string,
+                    message: string
+               }
+            list: string
+         */
+        this.config.commands = {
+            [command]: {
+                command: command,
+                message: message,
+                hasSub: hasSub,
+                hasNext: hasNext,
+                sub: sub,
+                next: next,
+                list: list,
+                isSticker: isSticker
+            },
+            ...this.config.commands
+        };
+        fs.writeFileSync(`./Bots/${this.name}/messages.json`, JSON.stringify(this.config));
+    }
+
+    AddCommand(command, message, hasSub = false, hasNext = false, sub = [], next = [], list = "", isSticker = false, overwrite = true) {
+        // Check if command already exists
+        if (this.IsCommand(command) && !overwrite) {
             return;
         }
         // Add the command using the command as the key and the message as the value
@@ -218,7 +288,38 @@ module.exports = class HelpBot extends Bot {
 
     async SendSticker(message, client) {
         if (message.hasMedia) {
-            const media = await message.downloadMedia();
+            message.reply("خلني اشوف...")
+            message.downloadMedia().then(media => {
+
+                if (media) {
+
+                    const mediaPath = './downloaded-media/';
+
+                    if (!fs.existsSync(mediaPath)) {
+                        fs.mkdirSync(mediaPath);
+                    }
+
+
+                    const extension = mime.extension(media.mimetype);
+
+                    const filename = new Date().getTime();
+
+                    const fullFilename = mediaPath + filename + '.' + extension;
+
+                    // Save to file
+                    try {
+                        fs.writeFileSync(fullFilename, media.data, { encoding: 'base64' });
+                        message.reply("يلا خذ استمتع")
+                        MessageMedia.fromFilePath(fullFilename)
+                        client.sendMessage(message.from, new MessageMedia(media.mimetype, media.data, filename.toString()), { sendMediaAsSticker: true, stickerAuthor: "Jarvis",
+                            stickerName: "Aires"} )
+                        fs.unlinkSync(fullFilename)
+                    } catch (err) {
+                        message.reply("احم مدري وش صار بس ما قدرت اسويه...")
+                    }
+                }
+            });
+            /*const media = await message.downloadMedia();
             message.reply("خلني أشوف...")
             try {
                 await client.sendMessage(message.from, media, {
@@ -228,9 +329,9 @@ module.exports = class HelpBot extends Bot {
                 })
             }catch (e){
                 message.reply("ما ينفع غير صورة يا حلو")
-            }
+            }*/
         }else{
-            message.reply("حط صورة مع الرسالة يا غبي")
+            message.reply("حط صورة/فيديو مع الرسالة يا غبي")
         }
     }
 
@@ -253,7 +354,6 @@ module.exports = class HelpBot extends Bot {
                                         }
                                     ).catch(err => {
                                         message.reply("همممم مدري وش صار غلط بس مقدرت اطرده.")
-                                        console.log("81: ", err)
                                     })
                                 } else {
                                     message.reply("منشن شخص يا عثل")

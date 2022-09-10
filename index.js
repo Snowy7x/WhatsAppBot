@@ -1,10 +1,20 @@
+/*const {getMoveDetails} = require("./Managers/MoveManager")
+getMoveDetails("Naruto").then (data => {
+    console.log(data)
+})
+return;*/
 const qrcode = require('qrcode-terminal');
-const {Client, LocalAuth} = require('whatsapp-web.js');
-
+const {Client, LocalAuth, MessageMedia} = require('whatsapp-web.js');
+const {getMoveDetails} = require("./Managers/MoveManager")
+Array.prototype.random = function () {
+    return this[Math.floor((Math.random()*this.length))];
+}
 const client = new Client({
     puppeteer: {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     },
+    ffmpegPath: "./ffmpeg",
+    ffmpeg: "./ffmpeg",
     authStrategy: new LocalAuth()
 });
 // Import all the bots
@@ -1242,6 +1252,9 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
 22-افلام وثائقية 📒`
 )
 
+
+// test: 120363028202077056@g.us
+// main: 120363042618722746@g.us
 const helpBot2 = new HelpBot("#jarvis", "#جارفيس", "120363042618722746@g.us");
 helpBot2.AddCommand("#جارفيس", `「الــبـــــوت 🤖 جارفيس」
 ─━─━─━∞◆∞━─━─
@@ -1560,7 +1573,7 @@ https://t.me/shortseries/1318`,false, false, null, null, "", false);
 helpBot2.AddCommand("ستيكر", null, false, false, null, null, "", true)
 helpBot2.AddCommand("مين عمك" || "من عمك" || "عمك", `
 دازاي الأب 3>
-مازينو العم 3>`, false, false, null, null, "", true)
+مازينو العم 3>`, false, false, null, null, "", false)
 helpBot2.AddCommand(
     "توصيات",
     `سيعرض لك جارفيس قائمة بها عدّة خيارات وخانات...
@@ -2478,7 +2491,39 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
 21-افلام عائلية 👨‍👩‍👦‍👦
 22-افلام وثائقية 📒`
 )
+helpBot2.AddCustomCommand("فلم", async (args, message, chat, client) => {
+    if (args.length <= 0) {
+        message.reply(["وش رأيك تكتب اسم الفلم", "يا ذكي خذ مثال: استخدم #جارفيس فلم naruto", "بالله؟ اكتب اسم", "لا"].random())
+    } else {
+        await getMoveDetails(args.join(" ")).then(async data => {
+            if (data.name) {
+                await MessageMedia.fromUrl(data.poster).then((poster) => {
+                    chat.sendMessage(
+                        `اسم الفلم: ${data.name}
+                        
+قصه الفلم: ${data.desc}
 
+التقييم: ${data.vote}
+
+تاريخ الانتاج: ${data.release}`, {
+                            media: poster
+                        })
+                }).catch(() => {
+                    chat.sendMessage(
+                        `اسم الفلم: ${data.name}
+                        
+قصه الفلم: ${data.desc}
+
+التقييم: ${data.vote}
+
+تاريخ الانتاج: ${data.release}`)
+                })
+            } else {
+                message.reply("همم ما ادري ما لقيته عندي")
+            }
+        })
+    }
+})
 
 client.on('qr', async (qr) => {
     qrcode.generate(qr, {small: true});
