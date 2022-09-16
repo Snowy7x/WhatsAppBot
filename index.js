@@ -10,6 +10,30 @@ translate('I speak Chinese', {to: 'ar'}).then(res => {
     console.error(err)
 })
 return;*/
+const Downloader = require("./Managers/services/download");
+const Searcher = require("./Managers/services/search");
+/*const Test = async (args) => {
+    const downloader = new Downloader();
+    const searcher = new Searcher();
+    let keyword = args;
+    try {
+        const { title, videoId } = await searcher.handle(keyword);
+        console.log(`Found it: "${title}"`);
+
+        console.log("Downloading...")
+
+        const music = await downloader.handle(videoId);
+
+        //const media = MessageMedia.fromFilePath(music);
+        return music;
+    } catch (error) {
+        console.log(error);
+    }
+}
+Test("Dancin").then(r => {
+    console.log("Done")
+});
+return;*/
 const qrcode = require('qrcode-terminal');
 const {Client, LocalAuth, MessageMedia} = require('whatsapp-web.js');
 const {getMoveDetails} = require("./Managers/MoveManager")
@@ -24,8 +48,10 @@ const client = new Client({
     ffmpeg: "/usr/bin/ffmpeg",
     authStrategy: new LocalAuth()
 });
+
 // Import all the bots
 const {NewsBot, HelpBot} = require('./Bots/index.js');
+
 
 // create new Instance of each bot
 const newsBot = new NewsBot("News Bot");
@@ -2498,6 +2524,7 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
 21-افلام عائلية 👨‍👩‍👦‍👦
 22-افلام وثائقية 📒`
 )
+
 helpBot2.AddCustomCommand("فلم", async (args, message, chat, client) => {
     console.log("doing cmd: " + message.body)
 
@@ -2534,6 +2561,28 @@ helpBot2.AddCustomCommand("فلم", async (args, message, chat, client) => {
         })
     }
 })
+helpBot2.AddCustomCommand("اغنيه", async (args, message, chat, client) => {
+    const downloader = new Downloader();
+    const searcher = new Searcher();
+    let keyword = args.join(" ");
+    try {
+        const { title, videoId } = await searcher.handle(keyword);
+        message.reply(`لقيتها: "${title}"`);
+
+        message.reply("ثواني بحملها...");
+
+        await downloader.handle(videoId).then(music => {ؤ
+            console.log(music)
+            const media = MessageMedia.fromFilePath(music);
+            chat.sendMessage(media);
+        })
+    } catch (error) {
+        console.log(error);
+        return message.reply("مدري وش صار بس في مشكل...");
+    }
+})
+
+
 
 client.on('qr', async (qr) => {
     qrcode.generate(qr, {small: true});

@@ -294,10 +294,9 @@ module.exports = class HelpBot extends Bot {
         if (message.hasMedia) {
             message.reply("خلني اشوف...")
             message.downloadMedia().then(media => {
-
                 if (media) {
 
-                    const mediaPath = './downloaded-media/';
+                    const mediaPath = './downloads/';
 
                     if (!fs.existsSync(mediaPath)) {
                         fs.mkdirSync(mediaPath);
@@ -373,4 +372,5 @@ module.exports = class HelpBot extends Bot {
             }
         });
     }
+
 }
