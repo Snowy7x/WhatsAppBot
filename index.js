@@ -2569,8 +2569,13 @@ helpBot2.AddCustomCommand("اغنيه", async (args, message, chat, client) => {
             message.reply(`The music command can only be used by group admins.`);
             break;
         } else if (participant.id._serialized === authorId && participant.isAdmin) {
+            if (args.length <= 0){
+                message.reply(`وش رأيك تكتب اسم اغنيه؟`);
+                return;
+            }
             const downloader = new Downloader();
             const searcher = new Searcher();
+
             let keyword = args.join(" ");
             try {
                 const { title, videoId } = await searcher.handle(keyword);
