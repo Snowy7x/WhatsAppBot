@@ -2562,10 +2562,11 @@ helpBot2.AddCustomCommand("فلم", async (args, message, chat, client) => {
     }
 })
 helpBot2.AddCustomCommand("اغنيه", async (args, message, chat, client) => {
+    const authorId = message.author;
     for (let participant of chat.participants) {
         if (participant.id._serialized === authorId && !participant.isAdmin) {
             // Here you know they are not an admin
-            //message.reply(`The music command can only be used by group admins.`);
+            message.reply(`The music command can only be used by group admins.`);
             break;
         } else if (participant.id._serialized === authorId && participant.isAdmin) {
             const downloader = new Downloader();
