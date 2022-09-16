@@ -2583,7 +2583,7 @@ helpBot2.AddCustomCommand("اغنيه", async (args, message, chat, client) => {
 
                 message.reply("ثواني بحملها...");
 
-                await downloader.handle(videoId).then(music => {ؤ
+                await downloader.handle(videoId).then(music => {
                     console.log(music)
                     const media = MessageMedia.fromFilePath(music);
                     chat.sendMessage(media);
