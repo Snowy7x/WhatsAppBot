@@ -2562,23 +2562,30 @@ helpBot2.AddCustomCommand("فلم", async (args, message, chat, client) => {
     }
 })
 helpBot2.AddCustomCommand("اغنيه", async (args, message, chat, client) => {
-    const downloader = new Downloader();
-    const searcher = new Searcher();
-    let keyword = args.join(" ");
-    try {
-        const { title, videoId } = await searcher.handle(keyword);
-        message.reply(`لقيتها: "${title}"`);
+    for (let participant of chat.participants) {
+        if (participant.id._serialized === authorId && !participant.isAdmin) {
+            // Here you know they are not an admin
+            //message.reply(`The music command can only be used by group admins.`);
+            break;
+        } else if (participant.id._serialized === authorId && participant.isAdmin) {
+            const downloader = new Downloader();
+            const searcher = new Searcher();
+            let keyword = args.join(" ");
+            try {
+                const { title, videoId } = await searcher.handle(keyword);
+                message.reply(`لقيتها: "${title}"`);
 
-        message.reply("ثواني بحملها...");
+                message.reply("ثواني بحملها...");
 
-        await downloader.handle(videoId).then(music => {ؤ
-            console.log(music)
-            const media = MessageMedia.fromFilePath(music);
-            chat.sendMessage(media);
-        })
-    } catch (error) {
-        console.log(error);
-        return message.reply("مدري وش صار بس في مشكل...");
+                await downloader.handle(videoId).then(music => {ؤ
+                    console.log(music)
+                    const media = MessageMedia.fromFilePath(music);
+                    chat.sendMessage(media);
+                })
+            } catch (error) {
+                console.log(error);
+                return message.reply("مدري وش صار بس في مشكل...");
+            }        }
     }
 })
 
