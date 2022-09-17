@@ -10,7 +10,7 @@ Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
 }
 module.exports = class HelpBot extends Bot {
-    constructor(name, prefix = "", workChannelID = "") {
+    constructor(name, prefix = "", workChannels = []) {
         super(name, prefix);
         // Check if messages file exists
         if (fs.existsSync(`./Bots/${name}/messages.json`)) {
@@ -27,7 +27,7 @@ module.exports = class HelpBot extends Bot {
         }
 
         this.nextQueue = [];
-        this.workChannelID = workChannelID;
+        this.workChannels = workChannels;
         this.customCommands = []
 
     }
@@ -48,7 +48,7 @@ module.exports = class HelpBot extends Bot {
         }
         if (message.body.startsWith(this.prefix) || this.IsInNextQueue(message.author)) {
             message.getChat().then(async chat => {
-                if (chat.id._serialized === this.workChannelID) {
+                if (this.workChannels.includes(chat.id._serialized)) {
                     if (message.body === this.name || message.body === this.prefix) {
                         console.log(`${message.body} command is executed!!`);
                         message.reply(this.GetCommandMessage(this.prefix));
@@ -344,7 +344,7 @@ module.exports = class HelpBot extends Bot {
 
     async Kick(message, client = null){
         await message.getChat().then(async chat => {
-            if (chat.id._serialized === this.workChannelID) {
+            if (this.workChannels.includes(chat.id._serialized)) {
                 await message.getContact().then(async contact => {
                     const authorId = message.author;
                     for (let participant of chat.participants) {

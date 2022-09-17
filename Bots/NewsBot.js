@@ -42,8 +42,8 @@ Snowy :|- @انا
 
     OnReady(){
         console.log('News Bot is Ready!');
-
-        cron.schedule('0 */2 * * *', async () => {
+/*
+        cron.schedule('0 *!/2 * * *', async () => {
             console.log('Refreshing tweets...');
             // get new tweets
             const newTweets = await this.refreshTweets();
@@ -63,7 +63,7 @@ Snowy :|- @انا
                     await this.client.sendMessage(this.chatID, formatted);
                 }
             }
-        });
+        });*/
     }
 
     async OnMessage(message, client = null) {
@@ -131,7 +131,7 @@ Snowy :|- @انا
         }
     }
 
-     async get5Tweets(id) {
+/*     async get5Tweets(id) {
         const tweets = [];
         let timeLine = await rwClient.v2.userTimeline(id, {
             expansions: ['attachments.media_keys', 'attachments.poll_ids', 'referenced_tweets.id'],
@@ -168,7 +168,7 @@ Snowy :|- @انا
             } else {
                 break;
             }
-            /*const medias = timeLine.includes.medias(tweet);
+            /!*const medias = timeLine.includes.medias(tweet);
             const poll = timeLine.includes.poll(tweet);
 
             if (medias.length) {
@@ -178,7 +178,7 @@ Snowy :|- @انا
               console.log('This tweet contains a poll! Options:', poll.options.map(opt => opt.label));
             }
 
-            tweets.push(tweet);*/
+            tweets.push(tweet);*!/
         }
         return tweets;
     }
@@ -208,10 +208,10 @@ Snowy :|- @انا
     }
 
     async test() {
-        cron.schedule('*/2 * * * *', async () => {
+        cron.schedule('*!/2 * * * *', async () => {
             const tweets = await this.refreshTweets();
             //console.log(tweets);
         });
-    }
+    }*/
 
 }

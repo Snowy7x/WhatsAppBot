@@ -10,6 +10,17 @@ translate('I speak Chinese', {to: 'ar'}).then(res => {
     console.error(err)
 })
 return;*/
+const AnimeManager = require("./Managers/AnimeManager");
+
+/*
+AnimeManager.getLatestAnime().then(async result => {
+    await console.log(result)
+})
+
+return;
+*/
+
+
 const Downloader = require("./Managers/services/download");
 const Searcher = require("./Managers/services/search");
 /*const Test = async (args) => {
@@ -52,10 +63,11 @@ const client = new Client({
 // Import all the bots
 const {NewsBot, HelpBot} = require('./Bots/index.js');
 
+//region Bot1
 
 // create new Instance of each bot
 const newsBot = new NewsBot("News Bot");
-const helpBot = new HelpBot("#والتر الأبيض", "#والتر", "966561815334-1612040974@g.us");
+const helpBot = new HelpBot("#والتر الأبيض", "#والتر", ["966561815334-1612040974@g.us"]);
 helpBot.AddCommand("#والتر الأبيض", `「الــبـــــوت 🤖 والتر الابيض」
 ─━─━─━∞◆∞━─━─
 
@@ -1284,11 +1296,13 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
 21-افلام عائلية 👨‍👩‍👦‍👦
 22-افلام وثائقية 📒`
 )
+//endregion
 
+//region Bot2
 
 // test: 120363028202077056@g.us
 // main: 120363042618722746@g.us
-const helpBot2 = new HelpBot("#jarvis", "#جارفيس", "120363042618722746@g.us");
+const helpBot2 = new HelpBot("#jarvis", "#جارفيس", ["120363042618722746@g.us"]);
 helpBot2.AddCommand("#جارفيس", `「الــبـــــوت 🤖 جارفيس」
 ─━─━─━∞◆∞━─━─
 
@@ -2594,27 +2608,100 @@ helpBot2.AddCustomCommand("اغنيه", async (args, message, chat, client) => {
             }        }
     }
 })
+//endregion
 
+//region Anime Bot
+const anime = new HelpBot("#jarvis", "#جارفيس", ["120363028202077056@g.us"]);
+anime.AddCommand("ستيكر", null, false, false, null, null, "", true);
+anime.AddCommand("عمك", `
+دازاي الأب 3>
+مازينو العم 3>`, false, false, null, null, "", false)
+anime.AddCustomCommand("انمي", async (args, message, chat, client) => {
+    if (args.length <= 0){
+        message.reply(["كيف تبيني اجيب انمي شي من غير اسم؟", "اكتب اسم انمي يا عثل...", "اكتب اسم اول يا غبي."].random())
+        return;
+    }
+    AnimeManager.getAnimeDetails(args.join(" ")).then(async result => {
+        if (result === null){
+            message.reply("هممم... ما لقيته")
+        }else{
+            await MessageMedia.fromUrl(result.img).then(poster => {
+                chat.sendMessage(`
+                اسم الأنمي: ${result.title}
+                
+عدد الحلقات: ${result.episodes.length}
 
+الفئة: ${result.genres.join(", ")}
+
+الوصف: ${result.description}
+`, {media: poster})
+            })
+        }
+    })
+})
+anime.AddCustomCommand("حلقه", async (args, message, chat, client) => {
+    if (args.length <= 0){
+        message.reply(["كيف تبيني اجيب انمي شي من غير اسم؟", "اكتب اسم انمي يا عثل...", "اكتب اسم اول يا غبي."].random())
+        return;
+    }
+    let name = args.join(" ").replace(args[args.length-1], "")
+    AnimeManager.getEpisodeDetails(name, args[args.length-1]).then(async result => {
+        if (result === null){
+            message.reply("هممم... ما لقيته")
+        }else{
+            let downloads = "";
+            result.download.map(item => {
+                downloads += `${item.name}: ${item.url}\n\n`
+            })
+            await MessageMedia.fromUrl(result.img).then(poster => {
+                chat.sendMessage(`
+                *${result.title.replace(" اون لاين -", "")}*
+
+روابط التحميل:
+${downloads}
+                `, {media: poster})
+            })
+        }
+    })
+})
+anime.AddCustomCommand("جديد", async (args, message, chat, client) => {
+    AnimeManager.getLatestAnime().then(async result => {
+        if (result === null) {
+            message.reply("هممم... ما ادري وش صار")
+        } else {
+            let latest = "";
+            result.map(item => {
+                latest += `${item.title} - الحلقة ${item.episodeNumber}\n\n`
+            })
+            message.reply(`*اخر الأنميات:*
+
+${latest}`)
+        }
+    })
+})
+//endregion
 
 client.on('qr', async (qr) => {
     qrcode.generate(qr, {small: true});
-    console.log('\nScan this QR code in your phone to login');
+    //console.log('\nScan this QR code in your phone to login');
     await newsBot.OnQr(qr);
     await helpBot.OnQr(qr);
     await helpBot2.OnQr(qr);
+    await anime.OnQr(qr)
 });
 
 client.on('ready', async () => {
     newsBot.OnReady()
     helpBot.OnReady()
     helpBot2.OnReady()
+    anime.OnReady()
 });
 
 client.on('message', async (message) => {
     await newsBot.OnMessage(message, client);
     await helpBot.OnMessage(message, client);
     await helpBot2.OnMessage(message, client);
+    await anime.OnMessage(message, client)
 })
 
 
