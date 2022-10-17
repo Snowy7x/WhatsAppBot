@@ -1,3 +1,20 @@
+const {getWallpapers} = require("./src/Managers/AnimeManager")
+/*getWallpapers("بلاك كلوفر").then(results => {
+    console.log(results)
+})*/
+/*getSongs("Black clover").then((results) => {
+    console.log(results)
+})*/
+/*const axios = require("axios");
+axios.get("https://api.animethemes.moe/search?q=black clover").then((result) => {
+    console.log(result.data.search.videos)
+})*/
+/*Alphacoders.get({
+    search: encodeURI("ناروتو"),
+    pages: 1,
+}).then(d => console.log(d.url, d.images, d.pages, d.timeout));
+console.log(Alphacoders.url)*/
+
 /*const {getMoveDetails} = require("./Managers/MoveManager")
 getMoveDetails("Naruto").then (data => {
     console.log(data)
@@ -10,7 +27,7 @@ translate('I speak Chinese', {to: 'ar'}).then(res => {
     console.error(err)
 })
 return;*/
-const AnimeManager = require("./Managers/AnimeManager");
+const AnimeManager = require("./src/Managers/AnimeManager");
 
 /*
 AnimeManager.getLatestAnime().then(async result => {
@@ -21,8 +38,8 @@ return;
 */
 
 
-const Downloader = require("./Managers/services/download");
-const Searcher = require("./Managers/services/search");
+const Downloader = require("./src/Managers/services/download");
+const Searcher = require("./src/Managers/services/search");
 /*const Test = async (args) => {
     const downloader = new Downloader();
     const searcher = new Searcher();
@@ -47,7 +64,7 @@ Test("Dancin").then(r => {
 return;*/
 const qrcode = require('qrcode-terminal');
 const {Client, LocalAuth, MessageMedia} = require('whatsapp-web.js');
-const {getMoveDetails} = require("./Managers/MoveManager")
+const {getMoveDetails} = require("./src/Managers/MoveManager")
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
 }
@@ -61,7 +78,8 @@ const client = new Client({
 });
 
 // Import all the bots
-const {NewsBot, HelpBot} = require('./Bots/index.js');
+const {NewsBot, HelpBot} = require('./_old/Bots/index.js');
+const {Lame} = require("node-lame");
 
 //region Bot1
 
@@ -2690,11 +2708,32 @@ client.on('qr', async (qr) => {
     await anime.OnQr(qr)
 });
 
-client.on('ready', async () => {
+client.on('ready', () => {
     newsBot.OnReady()
     helpBot.OnReady()
     helpBot2.OnReady()
     anime.OnReady()
+
+    console.log("Downloading...")
+
+    // Do A LITTLE TEST:
+    MessageMedia.fromUrl("https://a.animethemes.moe/ShingekiNoKyojin-OP1.ogg").then(media => {
+        console.log("Downloaded")
+        let buffer = _base64ToArrayBuffer(media.data)
+        const encoder = new Lame({
+            output: "./smt.mp3",
+        }).setBuffer(buffer);
+
+        encoder.encode()
+            .then(() => {
+                // Encoding finished
+                console.log("Done")
+            })
+            .catch((error) => {
+                // Something went wrong
+                console.log(error)
+            });
+    })
 });
 
 client.on('message', async (message) => {
@@ -2711,3 +2750,7 @@ client.initialize().then(r =>
 ).catch(e => {
     console.log(e);
 });
+
+function _base64ToArrayBuffer(base64) {
+    return Buffer.from(base64, 'base64');
+}
