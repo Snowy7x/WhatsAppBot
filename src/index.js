@@ -2824,8 +2824,10 @@ anime.AddCommand(["اوسات", "اوست", "أغنيه", "ost", "أغنيه", "
         for (let k in result){
             for(let l in result[k].themes) {
                 let v = result[k].themes[l];
-                listMsg += `#${i}- ${v.slug + ": " + v.title}\n`
-                i++
+                if (v.slug !== undefined && v.title !== undefined) {
+                    listMsg += `#${i}- ${v.slug + ": " + v.title}\n`
+                    i++
+                }
             }
         }
         setTimeout(() => {
@@ -2841,12 +2843,14 @@ ${listMsg}`)
                 for (let k in result){
                     for(let l in result[k].themes) {
                         let v = result[k].themes[l];
-                        commands.commands.push({
-                            "command": "#" + i,
-                            "name": v.slug + ": " + v.title,
-                            "link": v.link
-                        })
-                        i++
+                        if (v.slug !== undefined && v.title !== undefined) {
+                            commands.commands.push({
+                                "command": "#" + i,
+                                "name": v.slug + ": " + v.title,
+                                "link": v.link
+                            })
+                            i++
+                        }
                     }
                 }
 
