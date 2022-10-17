@@ -6,7 +6,7 @@ const path = require("path");
 const axios = require("axios");
 const fs = require("fs");
 const ffmpeg = require("ffmpeg");
-const {Kick} = require("./Commands/GeneralCommands");
+const {Kick, SendSticker} = require("./Commands/GeneralCommands");
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
 }
@@ -1376,6 +1376,12 @@ jarvis.AddCommand(["اغنيه", "صوتيه", "صوت", "music", "song"], {}, a
                 return message.reply("مدري وش صار بس في مشكل...");
             }        }
     }
+})
+jarvis.AddCommand(["kick", "ban", "كيك", "طرد", "بان"], {isAdmin: true}, async (args, message, chat, bot, ...things) => {
+    await Kick(message, client)
+})
+jarvis.AddCommand(["sticker", "ستيكر", "ستكر", "ملصق", "ملصقات"], {isAdmin: true}, async (args, message, chat, bot, ...things) => {
+    await SendSticker(message, client)
 })
 
 // endregion
