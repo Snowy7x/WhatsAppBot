@@ -64,7 +64,7 @@ const getSongs = async (animeName) => {
             animeName = encodeURI(animeName)
         })
     }
-    animeName = animeName.split(" ").join("-")
+    animeName = animeName.replaceAll(" ", "-")
     let data = await get(`https://api.animethemes.moe/search?page[limit]=4&fields[search]=anime,animethemes,artists,series,studios&q=${animeName}&include[anime]=animethemes.animethemeentries.videos,animethemes.animethemeentries.videos.audio,animethemes.song,images&fields[anime]=name&fields[animetheme]=type,slug&fields[animethemeentry]=spoiler,nsfw&fields[video]=tags,resolution,nc,subbed,lyrics,uncen,source,overlap&fields[image]=facet,link&fields[song]=title`);
     data = data.search.anime;
     let songs = {};
