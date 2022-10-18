@@ -2895,14 +2895,14 @@ anime.AddCommand(["kick", "ban", "كيك", "طرد", "بان"], {isAdmin: true},
 client.on('qr', async (qr) => {
     qrcode.generate(qr, {small: true});
     //console.log('\nScan this QR code in your phone to login');
-    //jarvis.OnQr()
-    //walter.OnQr()
+    jarvis.OnQr()
+    walter.OnQr()
     anime.OnQr()
 });
 
 client.on('ready', async () => {
-    //jarvis.OnReady()
-    //walter.OnReady()
+    jarvis.OnReady()
+    walter.OnReady()
     anime.OnReady()
     console.log("Downloading...")
 
@@ -2927,8 +2927,8 @@ client.on('ready', async () => {
 });
 
 client.on('message', (message) => {
-    //jarvis.OnMessage(message, client);
-    //walter.OnMessage(message, client);
+    jarvis.OnMessage(message, client);
+    walter.OnMessage(message, client);
     anime.OnMessage(message, client);
 })
 
