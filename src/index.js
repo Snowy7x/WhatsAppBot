@@ -114,13 +114,14 @@ function convertWavToMp3(oggFileName) {
 return;*/
 
 // test: 120363028202077056@g.us
-// main: 120363042618722746@g.us
+// gameshow: 120363042618722746@g.us
+// tnegin: 966551199156-1630897797@g.us
 
 
 
 // region Jarvis Bot
 
-const jarvis = new Bot("Jarvis", "#جارفيس", ["120363028202077056@g.us"]);
+const jarvis = new Bot("Jarvis", "#جارفيس", ["120363042618722746@g.us"]);
 jarvis.AddMsgCommand("تست", {isAdmin: true}, "TEST MESSAGE RECEIVED~!")
 jarvis.AddMsgCommand(["#jarvis", "#جارفيس"], {isAdmin: false}, `「الــبـــــوت 🤖 جارفيس」
 ─━─━─━∞◆∞━─━─
@@ -2587,9 +2588,8 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
 // endregion
 
 
-
 //region Anime Bot
-const anime = new Bot("Jarvis", "#جارفيس", ["966551199156-1630897797@g.us", "120363028202077056@g.us"], client, `「الــبـــــوت 🤖 جارفيس」
+const anime = new Bot("Jarvis", "#جارفيس", ["966551199156-1630897797@g.us"], client, `「الــبـــــوت 🤖 جارفيس」
 ─━─━─━∞◆∞━─━─
 
 •| قـائـمـة الاوامـر :
