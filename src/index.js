@@ -1405,7 +1405,7 @@ jarvis.AddCommand(["اغنيه", "صوتيه", "صوت", "music", "song"], {}, a
 jarvis.AddCommand(["kick", "ban", "كيك", "طرد", "بان"], {isAdmin: true}, async (args, message, chat, bot, ...things) => {
     await Kick(message, client)
 })
-jarvis.AddCommand(["sticker", "ستيكر", "ستكر", "ملصق", "ملصقات"], {isAdmin: true}, async (args, message, chat, bot, ...things) => {
+jarvis.AddCommand(["sticker", "ستيكر", "ستكر", "ملصق", "ملصقات"], {isAdmin: false}, async (args, message, chat, bot, ...things) => {
     await SendSticker(message, client)
 })
 
