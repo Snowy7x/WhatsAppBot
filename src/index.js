@@ -2951,9 +2951,14 @@ client.on('ready', async () => {
 });
 
 client.on('message', (message) => {
-    jarvis.OnMessage(message, client);
-    walter.OnMessage(message, client);
-    anime.OnMessage(message, client);
+    try {
+        jarvis.OnMessage(message, client);
+        walter.OnMessage(message, client);
+        anime.OnMessage(message, client);
+    }catch (e){
+        message.reply("حصلت معاي مشكله اعذرني...")
+        console.log("Error happened: " + e)
+    }
 })
 
 client.initialize().then(r =>
