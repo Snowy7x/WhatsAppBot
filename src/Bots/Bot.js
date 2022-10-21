@@ -16,9 +16,10 @@ const {MessageMedia} = require("whatsapp-web.js");
 
 module.exports = class Bot {
 
-    constructor(name, prefix = "", workChannels = [], helpMsg) {
+    constructor(name, prefix = "", workChannels = [], client, helpMsg) {
         this.name = name;
         this.prefix = prefix;
+        this.client = client;
         this.commands = [];
         this.channels = workChannels;
         this.secondCmdPlayers = []
