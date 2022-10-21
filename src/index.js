@@ -121,7 +121,7 @@ return;*/
 
 // region Jarvis Bot
 
-const jarvis = new Bot("Jarvis", "#جارفيس", ["120363042618722746@g.us"], `「الــبـــــوت 🤖 جارفيس」
+const jarvis = new Bot("Jarvis", "#جارفيس", ["120363042618722746@g.us"], client, `「الــبـــــوت 🤖 جارفيس」
 ─━─━─━∞◆∞━─━─
 
 •| قـائـمـة الاوامـر :
@@ -2613,7 +2613,7 @@ The Flash (2023) ᶜᵒᵐᶦⁿᵍ ˢᵒᵒⁿ`
 
 
 //region Anime Bot
-const anime = new Bot("Jarvis", "#جارفيس", ["966551199156-1630897797@g.us", "120363028202077056@g.us"], `「الــبـــــوت 🤖 جارفيس」
+const anime = new Bot("Jarvis", "#جارفيس", ["966551199156-1630897797@g.us"], client, `「الــبـــــوت 🤖 جارفيس」
 ─━─━─━∞◆∞━─━─
 
 •| قـائـمـة الاوامـر :
@@ -2928,6 +2928,8 @@ client.on('ready', async () => {
     jarvis.OnReady()
     walter.OnReady()
     anime.OnReady()
+    console.log("Downloading...")
+
    /* // Do A LITTLE TEST:
     MessageMedia.fromUrl("https://a.animethemes.moe/ShingekiNoKyojin-OP1.ogg").then(media => {
         console.log("Downloaded")
@@ -2949,10 +2951,14 @@ client.on('ready', async () => {
 });
 
 client.on('message', (message) => {
-    console.log(message.body)
-    jarvis.OnMessage(message, client);
-    walter.OnMessage(message, client);
-    anime.OnMessage(message, client);
+    try {
+        jarvis.OnMessage(message, client);
+        walter.OnMessage(message, client);
+        anime.OnMessage(message, client);
+    }catch (e){
+        message.reply("حصلت معاي مشكله اعذرني...")
+        console.log("Error happened: " + e)
+    }
 })
 
 client.initialize().then(r =>
