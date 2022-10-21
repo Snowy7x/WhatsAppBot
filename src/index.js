@@ -7,6 +7,8 @@ const axios = require("axios");
 const fs = require("fs");
 const ffmpeg = require("ffmpeg");
 const {Kick, SendSticker} = require("./Commands/GeneralCommands");
+const Downloader = require("./Managers/services/download");
+const Searcher = require("./Managers/services/search");
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
 }
@@ -17,6 +19,10 @@ const client = new Client({
     ffmpegPath: "/usr/bin/ffmpeg",
     ffmpeg: "/usr/bin/ffmpeg",
     authStrategy: new LocalAuth()
+});
+
+process.on('uncaughtException', function (error) {
+    console.log(error.stack);
 });
 
 const sendFileAsync = async (message, chat, uriFile, directoryDwd) => {
