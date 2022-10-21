@@ -2781,7 +2781,7 @@ anime.AddCommand(["info", "details", "معلومات", "أنمي", "انمي"], 
     }
     message.reply("لحظات...")
     await getAnimeDetails(args.join(" ")).then(details => {
-        if (details == null){
+        if (details == null || details.title === ""){
             message.reply("ما لقيت الأنمي باللسته عندي :؟")
         }else {
             let others = ""

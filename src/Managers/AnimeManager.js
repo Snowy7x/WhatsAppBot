@@ -4,6 +4,7 @@ const {Alphacoders} = require("awse");
 const translate = require('translate-google')
 
 const isEnglish = str => {
+    str = str.replaceAll(" ", "")
     const regex = /^[~`!@#$%^&*()_+=[\]\{}|;':",.\/<>?a-zA-Z0-9-]+$/;
     return regex.test(str)
 };
@@ -30,7 +31,7 @@ const getAnimeDetails = async (animeName) => {
             animeName = encodeURI(animeName)
         })
     }
-    animeName = animeName.split(" ").join("-")
+    animeName = animeName.replaceAll(" ", "-")
     return await get("http://www.snowyanime.com/api/anime/" + animeName);
 }
 
@@ -43,7 +44,7 @@ const getEpisodeDetails = async (animeName, episode) => {
             animeName = encodeURI(animeName)
         })
     }
-    animeName = animeName.split(" ").join("-")
+    animeName = animeName.replaceAll(" ", "-")
     return await getAnimeDetails(animeName).then(async details => {
         if (details === null) return null;
         if (details.episodes.length >= episode){
