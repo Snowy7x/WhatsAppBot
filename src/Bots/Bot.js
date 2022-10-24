@@ -38,8 +38,6 @@ module.exports = class Bot {
         if (message.author?.includes("74479336" || "551199156")) {
             if (message.body.includes("this chat id?")) {
                 message.getChat().then(chat => {
-                    console.log(chat.name);
-                    console.log(chat.id._serialized);
                     message.reply("This chat is " + chat.name);
                     message.reply("This chat id is " + chat.id._serialized);
                 })
