@@ -48,7 +48,7 @@ const getEpisodeDetails = async (animeName, episode) => {
     return await getAnimeDetails(animeName).then(async details => {
         if (details === null) return null;
         if (details.episodes.length >= episode){
-            const data = await get("http://www.snowyanime.com/api/episode/" + details.episodes[episode].episodeUrl);
+            const data = await get("http://www.snowyanime.com/api/episode/" + details.episodes[episode - 1].episodeUrl);
             data.img = details.img;
             return data;
         }

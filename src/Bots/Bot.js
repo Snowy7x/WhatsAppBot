@@ -44,7 +44,8 @@ module.exports = class Bot {
             }
         }
         const parts = message.body.split(" ");
-        if (message.body.startsWith(this.prefix)) {
+        if (message.body.startsWith(this
+            .prefix)) {
             message.getChat().then(async chat => {
                 chat.sendSeen().then()
                 if (this.channels.includes(chat.id._serialized)) {
