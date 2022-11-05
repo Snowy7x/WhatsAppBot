@@ -2999,3 +2999,13 @@ client.initialize().then(r =>
 ).catch(e => {
     console.log(e);
 });
+
+client.on('disconnected', () => {
+   console
+       .log("Disconnected, trying to reconnect")
+    client.initialize().then(r =>
+        console.log("Whatsapp Web Client is Ready!")
+    ).catch(e => {
+        console.log(e);
+    });
+});
