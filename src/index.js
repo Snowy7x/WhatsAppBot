@@ -21,10 +21,6 @@ const client = new Client({
     authStrategy: new LocalAuth()
 });
 
-process.on('uncaughtException', function (error) {
-    console.log(error.stack);
-});
-
 const sendFileAsync = async (message, chat, uriFile, directoryDwd) => {
     const nameFile = path.basename(uriFile)
 
@@ -3003,6 +2999,14 @@ client.initialize().then(r =>
 client.on('disconnected', () => {
    console
        .log("Disconnected, trying to reconnect")
+    client.initialize().then(r =>
+        console.log("Whatsapp Web Client is Ready!")
+    ).catch(e => {
+        console.log(e);
+    });
+});
+
+process.on('uncaughtException', function (error) {
     client.initialize().then(r =>
         console.log("Whatsapp Web Client is Ready!")
     ).catch(e => {
