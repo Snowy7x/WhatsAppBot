@@ -14,7 +14,16 @@ Array.prototype.random = function () {
 }
 const client = new Client({
     puppeteer: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: [
+            '--no-sanbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--single-process',
+            '--disable-gpu',
+        ],
     },
     ffmpegPath: "/usr/bin/ffmpeg",
     ffmpeg: "/usr/bin/ffmpeg",
