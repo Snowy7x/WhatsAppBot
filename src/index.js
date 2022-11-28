@@ -13,8 +13,8 @@ Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
 }
 
-const pathFile = path.resolve(__dirname, 'download', "Naruto-OP5.ogg")
-/*
+/*const pathFile = path.resolve(__dirname, 'download', "Naruto-OP5.ogg")
+
 convertWavToMp3(pathFile).then(res => {
     console.log(res)
 }).catch(err => {
@@ -101,8 +101,11 @@ function convertWavToMp3(oggFileName) {
             var command = ffmpeg(oggFileName)
                 .inputFormat('ogg')
                 .format('mp3')
+                .on('end', () => {
+                    console.log("Converted the file")
+                    resolve(outputFile)
+                })
                 .save(outputFile)
-            resolve(outputFile)
             /*new ffmpeg(oggFileName).then(val => {
                 console.log("New ffmpeg was made....")
                 try{
