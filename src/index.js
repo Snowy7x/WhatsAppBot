@@ -67,7 +67,6 @@ const sendFileAsync = async (message, chat, uriFile, directoryDwd) => {
 function send(url, chat) {
     let media = MessageMedia.fromFilePath(url)
     chat.sendMessage(media).then(res => {
-        console.log(res)
         fs.unlink(url, () => {
             console.log("removed [mp3]: " + url)
         });
@@ -2892,6 +2891,10 @@ anime.AddCommand(["wallpaper", "خلفية", "wallpapers", "خلفيات", "عر
 */
 
 anime.AddCommand(["اوسات", "اوست", "أغنيه", "ost", "أغنيه", "اغنيه", "song", "اوستات", "أوستات"], {isAdmin: true}, (args, message, chat, bot, ...things) => {
+    if (args.length <= 0 || args.join(" ") === ""){
+        message.reply(["كيف تبيني اجيب انمي شي من غير اسم؟", "اكتب اسم انمي يا عثل...", "اكتب اسم اول يا غبي.", "جرب تكتب اسم أنمي", "اسم الأنمي؟"].random())
+        return;
+    }
     message.reply("لحظات...")
     getSongs(args.join(" ")).then(result => {
         if (Object.keys(result).length <= 0){
