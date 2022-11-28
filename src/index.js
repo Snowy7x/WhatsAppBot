@@ -9,10 +9,12 @@ const ffmpeg = require("ffmpeg");
 const {Kick, SendSticker} = require("./Commands/GeneralCommands");
 const Downloader = require("./Managers/services/download");
 const Searcher = require("./Managers/services/search");
+const {error} = require("qrcode-terminal");
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
 }
 const client = new Client({
+
     puppeteer: {
         args: [
             '--no-sandbox',
@@ -46,6 +48,7 @@ const sendFileAsync = async (message, chat, uriFile, directoryDwd) => {
             console.log('File downloaded successfully :)')
             convertWavToMp3(pathFile).then(file => {
                 send(file, chat)
+                console.log("Converted the file...")
                 }).catch(oggFile => {
                 console.log(oggFile)
                 send(oggFile, chat)
@@ -61,16 +64,18 @@ const sendFileAsync = async (message, chat, uriFile, directoryDwd) => {
 function send(url, chat) {
     let media = MessageMedia.fromFilePath(url)
     chat.sendMessage(media).then(res => {
+        console.log(res)
         fs.unlink(url, () => {
-            console.log("removed: " + url)
+            console.log("removed [mp3]: " + url)
         });
     }).catch(er => {
         fs.unlink(url, () => {
-            console.log("removed: " + url)
+            console.log("removed with error: " + url)
+            console.log("Error: " + er)
         });
     })
     fs.unlink(url.replace(".mp3", ".ogg"), () => {
-        console.log("removed: " + url.replace(".mp3", ".ogg"))
+        console.log("removed [ogg]: " + url.replace(".mp3", ".ogg"))
     });
 }
 
@@ -104,25 +109,9 @@ function convertWavToMp3(oggFileName) {
 
 }
 
-
-/*getSongs("Naruto").then(result => {
-    let commands = {commands: []}, i = 1;
-    for (let k in result){
-        for(let l in result[k].themes) {
-            console.log(l)
-            let v = result[k].themes[l];
-            commands.commands.push({
-                "command": "#" + i,
-                "name": v.slug + ": " + v.title,
-                "link": v.link
-            })
-            i++
-        }
-    }
-    console.log(commands)
-})
-
-return;*/
+/*
+ Tests place
+ */
 
 // test: 120363028202077056@g.us
 // gameshow: 120363042618722746@g.us
@@ -132,7 +121,7 @@ return;*/
 
 // region Jarvis Bot
 
-const jarvis = new Bot("Jarvis", "#جارفيس", ["120363042618722746@g.us"], client, `「الــبـــــوت 🤖 جارفيس」
+const jarvis = new Bot("Jarvis", "#جارفيس", ["120363028202077056@g.us"], client, `「الــبـــــوت 🤖 جارفيس」
 ─━─━─━∞◆∞━─━─
 
 •| قـائـمـة الاوامـر :
@@ -2650,7 +2639,7 @@ Tengin: 966551199156-1630897797@g.us
  Taino: 966551199156-1630811131@g.us
  Valley: 120363039507094963@g.us
  */
-//region Anime Bot
+//region Anime Bot/**/
 const anime = new Bot("Jarvis", "#جارفيس", ["966551199156-1630897797@g.us", "966551199156-1630811110@g.us", "966551199156-1630811131@g.us", "120363039507094963@g.us"], client, `「الــبـــــوت 🤖 جارفيس」
 ─━─━─━∞◆∞━─━─
 
@@ -2696,7 +2685,7 @@ anime.AddMsgCommand(["مساعدة", "help", "مساعده", "أوامر", "او
 
  
 ─━─━─━∞◆∞━─━─`);
-anime.AddMsgCommand(["القوانين", "قوانين"], {isAdmin: true}, `※━─━──【𖡹】──━─━※
+anime.AddMsgCommand(["القوانين", "قوانين"], {isAdmin: false}, `※━─━──【𖡹】──━─━※
 
 •مثلما عُرِف، من يَحترِم يُحترمْ•
 
@@ -2790,9 +2779,10 @@ anime.AddCommand(["info", "details", "معلومات", "أنمي", "انمي"], 
         return;
     }
     message.reply("لحظات...")
-    await getAnimeDetails(args.join(" ")).then(details => {
+    let animeName = args.join(" ");
+    await getAnimeDetails(animeName).then(details => {
         if (details == null || details.title === ""){
-            message.reply("ما لقيت الأنمي باللسته عندي :؟")
+            message.reply("ما لقيت الأنمي باللسته عندي!! ")
         }else {
             let others = ""
             for (let obj of details.stats) {
@@ -2804,8 +2794,17 @@ anime.AddCommand(["info", "details", "معلومات", "أنمي", "انمي"], 
 النوع: ${details.genres.join("، ")}
 
 ` + others + `
-الوصف: ${details.description}
+الوصف: ${details.description.replaceAll("xsanime", "snowyanime")}
 `, {media: poster})
+            }).catch(err => {
+                console.log("Could not download the poster: " + err)
+                chat.sendMessage(`الاسم: ${details.title}
+
+النوع: ${details.genres.join("، ")}
+
+` + others + `
+الوصف: ${details.description.replaceAll("xsanime", "snowyanime")}
+`)
             });
         }
 

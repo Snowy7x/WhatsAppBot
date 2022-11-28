@@ -32,7 +32,15 @@ const getAnimeDetails = async (animeName) => {
         })
     }
     animeName = animeName.replaceAll(" ", "-")
-    return await get("http://www.snowyanime.com/api/anime/" + animeName);
+    let details;
+    await get("http://www.snowyanime.com/api/anime/" + animeName).then(res => {
+        details = res
+    }).catch(er => {
+        console.log("Error fetching")
+        console.log(er)
+        details = null
+    })
+    return details;
 }
 
 const getEpisodeDetails = async (animeName, episode) => {
@@ -48,7 +56,8 @@ const getEpisodeDetails = async (animeName, episode) => {
     return await getAnimeDetails(animeName).then(async details => {
         if (details === null) return null;
         if (details.episodes.length >= episode){
-            const data = await get("http://www.snowyanime.com/api/episode/" + details.episodes[episode - 1].episodeUrl);
+            const ep = details.episodes.find(x => x.episodeNumber === episode.toString())
+            const data = await get("http://www.snowyanime.com/api/episode/" + ep.episodeUrl);
             data.img = details.img;
             return data;
         }

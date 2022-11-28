@@ -7,7 +7,6 @@ const SendSticker = async (message, client) => {
         message.reply("خلني اشوف...")
         message.downloadMedia().then(media => {
             if (media) {
-
                 const mediaPath = './downloads/';
 
                 if (!fs.existsSync(mediaPath)) {
@@ -30,13 +29,17 @@ const SendSticker = async (message, client) => {
                         stickerName: "Aires"
                     }).then(() => {
                         message.reply("يلا خذ استمتع")
-
+                    }).catch(err => {
+                        console.log("Did not do the file cause: " + err)
                     })
                     fs.unlinkSync(fullFilename)
                 } catch (err) {
+                    console.log("Did not do the file cause: " + err)
                     message.reply("احم مدري وش صار بس ما قدرت اسويه...")
                 }
             }
+        }).catch(err => {
+            console.log("Did not download cause: " + err)
         });
     }else{
         message.reply("حط صورة/فيديو مع الرسالة يا غبي")
