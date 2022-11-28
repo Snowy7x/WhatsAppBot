@@ -5,7 +5,6 @@ const {getAnimeDetails, getEpisodeDetails, getWallpapers, getSongs} = require(".
 const path = require("path");
 const axios = require("axios");
 const fs = require("fs");
-const ffmpeg = require("ffmpeg");
 const {Kick, SendSticker} = require("./Commands/GeneralCommands");
 const Downloader = require("./Managers/services/download");
 const Searcher = require("./Managers/services/search");
@@ -15,6 +14,7 @@ Array.prototype.random = function () {
 }
 
 const pathFile = path.resolve(__dirname, 'download', "Naruto-OP5.ogg")
+
 convertWavToMp3(pathFile).then(res => {
     console.log(res)
 }).catch(err => {
@@ -95,7 +95,15 @@ function convertWavToMp3(oggFileName) {
                 throw new Error(`Not a ogg file`);
             }
             const outputFile = oggFileName.replace(".ogg", ".mp3");
-            new ffmpeg(oggFileName).then(val => {
+            console.log("\Converting file %s", outputFile)
+
+            var ffmpeg = require('fluent-ffmpeg');
+            var command = ffmpeg(oggFileName)
+                .inputFormat('ogg')
+                .format('mp3')
+                .save(outputFile)
+            resolve(outputFile)
+            /*new ffmpeg(oggFileName).then(val => {
                 console.log("New ffmpeg was made....")
                 try{
                     val.fnExtractSoundToMP3(outputFile,function (error, file) {
@@ -111,7 +119,7 @@ function convertWavToMp3(oggFileName) {
             }).catch(err => {
                 console.log(err)
             })
-            console.log("Converting... 2")
+            console.log("Converting... 2")*/
         }catch (e) {
             console.log("Did not Converted")
             reject(oggFileName)
