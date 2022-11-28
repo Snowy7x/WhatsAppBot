@@ -41,8 +41,8 @@ const sendFileAsync = async (message, chat, uriFile, directoryDwd) => {
         pf.on('finish', () => {
             console.log('File downloaded successfully :)')
             convertWavToMp3(pathFile).then(file => {
-                send(file, chat)
                 console.log("Converted the file...")
+                send(file, chat)
                 }).catch(oggFile => {
                 console.log(oggFile)
                 send(oggFile, chat)
@@ -81,6 +81,7 @@ function isOggFile(oggFileName) {
 function convertWavToMp3(oggFileName) {
     return new Promise((resolve, reject) => {
         try {
+            console.log("Converting...")
             if (!isOggFile(oggFileName)) {
                 throw new Error(`Not a ogg file`);
             }
@@ -93,7 +94,10 @@ function convertWavToMp3(oggFileName) {
                         console.log('Audio file: ' + file);
                     resolve(outputFile)
                 });
+            }).catch(err => {
+                console.log(err)
             })
+            console.log("Converting... 2")
         }catch (e) {
             console.log("Did not Converted")
             reject(oggFileName)
