@@ -87,13 +87,18 @@ function convertWavToMp3(oggFileName) {
             }
             const outputFile = oggFileName.replace(".ogg", ".mp3");
             new ffmpeg(oggFileName).then(val => {
-                val.fnExtractSoundToMP3(outputFile,function (error, file) {
-                    if (error)
-                        console.log("not Converted: " + error)
-                    if (!error)
-                        console.log('Audio file: ' + file);
-                    resolve(outputFile)
-                });
+                console.log("New ffmpeg was made....")
+                try{
+                    val.fnExtractSoundToMP3(outputFile,function (error, file) {
+                        if (error)
+                            console.log("not Converted: " + error)
+                        if (!error)
+                            console.log('Audio file: ' + file);
+                        resolve(outputFile)
+                    });
+                }catch (e) {
+                    console.log(e)
+                }
             }).catch(err => {
                 console.log(err)
             })
