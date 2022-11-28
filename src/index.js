@@ -13,6 +13,15 @@ const {error} = require("qrcode-terminal");
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
 }
+
+const pathFile = path.resolve(__dirname, 'download', "Naruto-OP5.ogg")
+convertWavToMp3(pathFile).then(res => {
+    console.log(res)
+}).catch(err => {
+    console.log(err)
+})
+
+return;
 const client = new Client({
 
     puppeteer: {
