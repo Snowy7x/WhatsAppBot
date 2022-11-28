@@ -14,14 +14,14 @@ Array.prototype.random = function () {
 }
 
 const pathFile = path.resolve(__dirname, 'download', "Naruto-OP5.ogg")
-
+/*
 convertWavToMp3(pathFile).then(res => {
     console.log(res)
 }).catch(err => {
     console.log(err)
 })
 
-return;
+return;*/
 const client = new Client({
 
     puppeteer: {
