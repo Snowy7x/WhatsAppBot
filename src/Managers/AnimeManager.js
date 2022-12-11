@@ -2,6 +2,8 @@ const malScraper = require('mal-scraper')
 const axios = require("axios")
 const {Alphacoders} = require("awse");
 const translate = require('translate-google')
+const io = require("cheerio");
+const files = require("fs")
 
 const isEnglish = str => {
     str = str.replaceAll(" ", "")
@@ -114,4 +116,54 @@ const getWallpapers = async (animeName) => {
     return result
 }
 
-module.exports = {getLatestAnime, getAnimeDetails, getEpisodeDetails, getSongs, getWallpapers}
+const getLatestNews = async () => {
+
+    let rawData = files.readFileSync("news.json")
+    let oldData = JSON.parse(rawData);
+
+    let newData = {};
+    await axios("https://www.crunchyroll.com/ar/news").then(res => {
+        const $ = io.load(res.data)
+        $(".news-item").each((index, item) => {
+            newData[index] = {
+                tile: $(item).find("h2").text().trim(),
+                description: $(item).find(".body .short p").text().trim(),
+                image: $(item).find(".body img").attr("src"),
+                link: "https://www.crunchyroll.com/" + $(item).find(".below-body .read-more a:nth-child(2)").attr("href")
+            }
+        })
+    })
+
+    let newNews = {}
+
+    if (oldData[0].link !== newData[0].link) {
+        console.log("there is different: " + Object.keys(newData).length)
+        newNews[0] = newData[0]
+        let i = 1;
+        while (newData[i].link !== oldData[0].link) {
+            newNews[i] = newData[i];
+            i++
+            if (i >= Object.keys(newData).length) {
+                break
+            }
+        }
+
+        newData = JSON.stringify(newData)
+        files.writeFile("news.json", newData, 'utf8', function (err) {
+            if (err) {
+                console.log("An error occurred while writing JSON Object to File.");
+                return console.log(err);
+            }
+
+            console.log("JSON file has been saved.");
+        });
+    } else {
+        console.log("no difference")
+    }
+
+    return newNews
+
+
+}
+
+module.exports = {getLatestAnime, getAnimeDetails, getEpisodeDetails, getSongs, getWallpapers, getLatestNews}

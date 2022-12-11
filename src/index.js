@@ -1,7 +1,7 @@
 const Bot = require("./Bots/Bot");
 const qrcode = require('qrcode-terminal');
 const {Client, LocalAuth, MessageMedia, List, Buttons} = require('whatsapp-web.js');
-const {getAnimeDetails, getEpisodeDetails, getWallpapers, getSongs} = require("./Managers/AnimeManager");
+const {getAnimeDetails, getEpisodeDetails, getWallpapers, getSongs, getLatestNews} = require("./Managers/AnimeManager");
 const path = require("path");
 const axios = require("axios");
 const fs = require("fs");
@@ -9,6 +9,7 @@ const {Kick, SendSticker} = require("./Commands/GeneralCommands");
 const Downloader = require("./Managers/services/download");
 const Searcher = require("./Managers/services/search");
 const {error} = require("qrcode-terminal");
+const cron = require("node-cron")
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
 }
@@ -2975,6 +2976,28 @@ anime.AddCommand(["kick", "ban", "كيك", "طرد", "بان"], {isAdmin: true},
 
 //endregion
 
+function sendNews(){
+    getLatestNews().then(res => {
+        if (Object.keys(res).length >= 1){
+            for (let index in res){
+                let news = res[index];
+                let message =
+                    `─━── 「خبر」─━──
+${news.description}
+
+رابط الخبر: ${news.link}
+─━─「⊱𝑨𝒊𝒓𝒆𝒔 𖡹 𝑵𝒆𝒘𝒔📬」─━─
+اللقب :|-انوس🔷   `
+                MessageMedia.fromUrl(news.image).then(image => {
+                    client.sendMessage("120363028202077056@g.us", message, {
+                        media: image
+                    })
+                })
+            }
+        }
+    })
+}
+
 client.on('qr', async (qr) => {
     qrcode.generate(qr, {small: true});
     //console.log('\nScan this QR code in your phone to login');
@@ -3020,8 +3043,12 @@ client.on('message', (message) => {
     }
 })
 
-client.initialize().then(r =>
-    console.log("Whatsapp Web Client is Ready!")
+client.initialize().then(r => {
+        console.log("Whatsapp Web Client is Ready!")
+
+        // Run the news bot:
+    cron.schedule("0 * * * *", sendNews)
+    }
 ).catch(e => {
     console.log(e);
 });

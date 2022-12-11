@@ -1,6 +1,13 @@
 const fs = require("fs");
 const {MessageMedia} = require("whatsapp-web.js");
 const mime = require('mime-types');
+const translate = require('translate-google')
+
+const isEnglish = str => {
+    str = str.replaceAll(" ", "")
+    const regex = /^[~`!@#$%^&*()_+=[\]\{}|;':",.\/<>?a-zA-Z0-9-]+$/;
+    return regex.test(str)
+};
 
 const SendSticker = async (message, client) => {
     if (message.hasMedia) {
@@ -82,4 +89,28 @@ const IsAdmin = (chat, authorId) => {
     }
 }
 
-module.exports ={SendSticker, Kick, IsAdmin};
+const Translate = async (text, to = "en") => {
+    let result;
+    switch (to){
+        case "ar":
+            await translate(text, {to: 'ar'}).then((da) => {
+                result = da
+            }).catch((err) => {
+                console.log("something wrong:", err)
+                result = text
+            })
+            break;
+        default:
+            await translate(text, {to: 'en'}).then((da) => {
+                result = da
+            }).catch((err) => {
+                console.log("something wrong:", err)
+                result = text
+            })
+            break;
+    }
+
+    return result
+}
+
+module.exports ={SendSticker, Kick, IsAdmin, Translate};
