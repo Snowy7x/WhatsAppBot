@@ -117,12 +117,13 @@ const getWallpapers = async (animeName) => {
 }
 
 const getLatestNews = async () => {
-
+    console.log("Fetching news")
     let rawData = files.readFileSync("news.json")
     let oldData = JSON.parse(rawData);
 
     let newData = {};
     await axios("https://www.crunchyroll.com/ar/news").then(res => {
+        console.log("Got the website")
         const $ = io.load(res.data)
         $(".news-item").each((index, item) => {
             newData[index] = {
@@ -132,6 +133,8 @@ const getLatestNews = async () => {
                 link: "https://www.crunchyroll.com/" + $(item).find(".below-body .read-more a:nth-child(2)").attr("href")
             }
         })
+    }).catch(err => {
+        console.log("Error: " + err)
     })
 
     let newNews = {}

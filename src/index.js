@@ -3010,8 +3010,6 @@ client.on('ready', async () => {
     jarvis.OnReady()
     walter.OnReady()
     anime.OnReady()
-    console.log("Downloading...")
-
    /* // Do A LITTLE TEST:
     MessageMedia.fromUrl("https://a.animethemes.moe/ShingekiNoKyojin-OP1.ogg").then(media => {
         console.log("Downloaded")
@@ -3045,10 +3043,8 @@ client.on('message', (message) => {
 
 client.initialize().then(r => {
         console.log("Whatsapp Web Client is Ready!")
-
-        // Run the news bot:
     cron.schedule("0 * * * *", sendNews)
-    }
+ }
 ).catch(e => {
     console.log(e);
 });
@@ -3070,3 +3066,6 @@ process.on('uncaughtException', function (error) {
         console.log(e);
     });
 });
+
+// Run the news bot:
+//cron.schedule("*/10 * * * * *", sendNews)
